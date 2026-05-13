@@ -1,16 +1,61 @@
-import React from 'react'
-import { participantsData, coursesData } from '../data/mockData'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useCourses } from '../hooks/useCourses'
+import { useParticipants } from '../hooks/useParticipants'
 
 function Participants(): React.ReactElement {
-    // Hilfsfunktion um Kurstitel von ID zu erhalten
+    const [searchColumn, setSearchColumn] = useState<'all' | 'name' | 'email' | 'course'>('all')
+    const [searchQuery, setSearchQuery] = useState('')
+    const { participants } = useParticipants()
+    const { courses } = useCourses()
+
     const getCourseTitle = (courseId: number): string => {
-        const course = coursesData.find(c => c.id === courseId)
+        const course = courses.find(c => c.id === courseId)
         return course ? course.title : 'Unbekannter Kurs'
     }
+
+    const filteredParticipants = participants.filter(p =>
+        /*// Oder auch Richtig für suche in allen Feldern (auch ID):
+        Object.values(p).join(' ').toLowerCase().includes(searchQuery.toLowerCase())
+        */
+        (searchColumn === 'name') && p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (searchColumn === 'email') && p.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (searchColumn === 'course') && getCourseTitle(p.courseId).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        // Für Suche in allen Feldern:
+        searchColumn === 'all' &&
+        [p.name, p.email, getCourseTitle(p.courseId)].join(' ').toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     return (
         <div>
             <h1 className="page-title">Teilnehmende</h1>
+
+            <div className="filter-container">
+                <div className="filter-bar" >
+                    <label htmlFor="status-filter" className="filter-label">Suche in Spalte:</label>
+                    <select
+                        id="search-query"
+                        value={searchColumn}
+                        onChange={e => setSearchColumn(e.target.value as 'all' | 'name' | 'email' | 'course')}
+                        className="filter-select"
+                    >
+                        <option value="all">Alle</option>
+                        <option value="name">Name</option>
+                        <option value="email">E-Mail</option>
+                        <option value="course">Kurs</option>
+                    </select>
+                </div>
+
+                <div className="search-bar" >
+                    <input
+                        type="text"
+                        placeholder="Teilnehmende suchen..."
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
+            </div>
 
             <div className="table-container">
                 <table>
@@ -19,31 +64,36 @@ function Participants(): React.ReactElement {
                             <th>Name</th>
                             <th>E-Mail</th>
                             <th>Zugewiesener Kurs</th>
+                            <th>Status</th>
+                            <th>Aktionen</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {participantsData.map(participant => (
+                        {filteredParticipants.map(participant => (
                             <tr key={participant.id}>
                                 <td>{participant.name}</td>
                                 <td>{participant.email}</td>
                                 <td>{getCourseTitle(participant.courseId)}</td>
+                                <td>
+                                    <span className={participant.status === 'enrolled' || participant.status === 'active'? 'badge badge-active' : 'badge badge-inactive'}>
+                                        {participant.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    <Link to={`/participants/${participant.id}`} className="btn-detail">Details</Link>
+                                </td>
                             </tr>
                         ))}
+                        {filteredParticipants.length === 0 && (
+                            <tr>
+                                <td colSpan={5} className="empty-table">
+                                    Keine Teilnehmenden gefunden.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
-            {/*      <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#fff3cd', borderRadius: '8px', borderLeft: '4px solid #ffc107' }}>
-        <h3 style={{ color: '#2c3e50', marginBottom: '10px' }}>⚠️ Bekannte Lücken:</h3>
-        <ul style={{ color: '#555', lineHeight: '1.8', marginLeft: '20px' }}>
-          <li>Keine Suchfunktion für Teilnehmende</li>
-          <li>Keine Filterung nach Kursen</li>
-          <li>Keine Detailansicht für Teilnehmende</li>
-          <li>Teilnehmerstatus wird nicht angezeigt</li>
-          <li>Keine Möglichkeit, Teilnehmende hinzuzufügen/zu bearbeiten</li>
-        </ul>
-      </div> 
-      */}
-
         </div>
     )
 }

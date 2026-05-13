@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-do
 import Dashboard from './pages/Dashboard.tsx'
 import Courses from './pages/Courses.tsx'
 import Participants from './pages/Participants.tsx'
+import CourseDetail from './pages/CourseDetail.tsx'
+import ParticipantDetail from './pages/ParticipantDetail.tsx'
 import './App.css'
 
 function App(): React.ReactElement {
@@ -14,7 +16,9 @@ function App(): React.ReactElement {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/participants" element={<Participants />} />
+            <Route path="/participants/:id" element={<ParticipantDetail />} />
           </Routes>
         </main>
       </div>

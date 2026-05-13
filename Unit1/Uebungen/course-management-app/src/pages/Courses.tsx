@@ -1,10 +1,37 @@
-import React from 'react'
-import { coursesData } from '../data/mockData'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useCourses } from '../hooks/useCourses'
+import { useParticipants } from '../hooks/useParticipants'
 
 function Courses(): React.ReactElement {
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
+    const { courses } = useCourses()
+    const { participants } = useParticipants()
+
+    const getParticipantCount = (courseId: number): number =>
+        participants.filter(p => p.courseId === courseId).length
+
+    const filteredCourses = statusFilter === 'all'
+        ? courses
+        : courses.filter(c => c.status === statusFilter)
+
     return (
         <div>
             <h1 className="page-title">Kurse</h1>
+
+            <div className="filter-bar">
+                <label htmlFor="status-filter" className="filter-label">Status:</label>
+                <select
+                    id="status-filter"
+                    value={statusFilter}
+                    onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
+                    className="filter-select"
+                >
+                    <option value="all">Alle</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
 
             <div className="table-container">
                 <table>
@@ -13,34 +40,36 @@ function Courses(): React.ReactElement {
                             <th>Kurstitel</th>
                             <th>Datum</th>
                             <th>Status</th>
+                            <th>Teilnehmende</th>
+                            <th>Aktionen</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {coursesData.map(course => (
+                        {filteredCourses.map(course => (
                             <tr key={course.id}>
                                 <td>{course.title}</td>
                                 <td>{new Date(course.date).toLocaleDateString('de-DE')}</td>
                                 <td>
                                     <span className={course.status === 'active' ? 'badge badge-active' : 'badge badge-inactive'}>
-                                        {course.status === 'active' ? 'Aktiv' : 'Inaktiv'}
+                                        {course.status}
                                     </span>
+                                </td>
+                                <td>{getParticipantCount(course.id)}</td>
+                                <td>
+                                    <Link to={`/courses/${course.id}`} className="btn-detail">Details</Link>
                                 </td>
                             </tr>
                         ))}
+                        {filteredCourses.length === 0 && (
+                            <tr>
+                                <td colSpan={5} style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                                    Keine Kurse gefunden.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
-
-            {/*<div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f0f8ff', borderRadius: '8px', borderLeft: '4px solid #3498db' }}>
-        <h3 style={{ color: '#2c3e50', marginBottom: '10px' }}>💡 Erweiterungsmöglichkeiten:</h3>
-        <ul style={{ color: '#555', lineHeight: '1.8', marginLeft: '20px' }}>
-          <li>Suchfunktion implementieren</li>
-          <li>Filterfunktion nach Status</li>
-          <li>Detailansicht für jeden Kurs</li>
-          <li>Anzahl Teilnehmende pro Kurs anzeigen</li>
-          <li>Kurse hinzufügen/bearbeiten/löschen</li>
-        </ul>
-      </div>*/}
         </div>
     )
 }

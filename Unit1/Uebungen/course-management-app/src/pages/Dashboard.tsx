@@ -1,11 +1,16 @@
-import React from 'react'
-import { coursesData, participantsData } from '../data/mockData'
+import React, {useState} from 'react'
+import { useCourses } from '../hooks/useCourses'
+import { useParticipants } from '../hooks/useParticipants'
 
 function Dashboard(): React.ReactElement {
+  const { courses } = useCourses()
+  const { participants } = useParticipants()
+
+
   // Berechne Statistiken
-  const totalCourses = coursesData.length
-  const activeCourses = coursesData.filter(c => c.status === 'active').length
-  const totalParticipants = participantsData.length
+  const totalCourses = courses.length
+  const activeCourses = courses.filter(c => c.status === 'active').length
+  const totalParticipants = participants.length
 
   return (
     <div>
@@ -31,7 +36,7 @@ function Dashboard(): React.ReactElement {
       </h2>
       
       <div className="cards-container">
-        {coursesData
+        {courses
           .filter(course => course.status === 'active')
           .map(course => (
             <div key={course.id} className="card">
@@ -39,7 +44,7 @@ function Dashboard(): React.ReactElement {
               <div className="card-content">
                 <p><strong>Datum:</strong> {new Date(course.date).toLocaleDateString('de-DE')}</p>
                 <p>{course.description}</p>
-                <div className="badge badge-active">Aktiv</div>
+                <div className="badge badge-active">Active</div>
               </div>
             </div>
           ))}

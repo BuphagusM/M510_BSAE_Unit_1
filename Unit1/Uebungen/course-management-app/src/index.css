@@ -141,6 +141,12 @@ table {
   border-collapse: collapse;
 }
 
+.empty-table {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
 thead {
   background-color: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
@@ -199,4 +205,137 @@ tbody tr:hover {
 .empty-state-icon {
   font-size: 48px;
   margin-bottom: 20px;
+}
+
+/* Search bar */
+.search-bar {
+  margin-bottom: 16px;
+  min-width: 20vw;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* Filter bar */
+.filter-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.filter-label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #3498db;
+}
+
+/* Detail button */
+.btn-detail {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 13px;
+  color: #3498db;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-detail:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Back button */
+.btn-back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #3498db;
+  text-decoration: none;
+}
+
+.btn-back:hover {
+  text-decoration: underline;
+}
+
+/* Detail card */
+.detail-card {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 180px;
+  font-size: 14px;
+}
+
+/* Section title */
+.section-title {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 14px;
+}
+
+/* Inline link */
+.link-text {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  text-decoration: underline;
 }
