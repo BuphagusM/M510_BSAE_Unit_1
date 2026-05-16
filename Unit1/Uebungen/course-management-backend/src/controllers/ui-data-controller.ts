@@ -1,34 +1,17 @@
 // ui-data-controller.ts
 import express from 'express';
-import { getAllCourses, getCourseById } from '../services/course-service';
-import { getAllParticipants, getParticipantById } from '../services/participant-service';
+import {getAllParticipantsDto} from '../services/dto-service';
 
-export const getAllCoursesHandler = (req: express.Request, res: express.Response) => {
-  const courses = getAllCourses();
-  res.json(courses);
-};
+// Teilnehmer-Handler
 
-export const getCourseByIdHandler = (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.id);
-  const course = getCourseById(id);
-  if (!course) {
-    res.status(404).json({ message: 'Course not found' });
-    return;
-  }
-  res.json(course);
-};
-
-export const getAllParticipantsHandler = (req: express.Request, res: express.Response) => {
-  const participants = getAllParticipants();
-  res.json(participants);
-};
-
-export const getParticipantByIdHandler = (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.id);
-  const participant = getParticipantById(id);
-  if (!participant) {
-    res.status(404).json({ message: 'Participant not found' });
-    return;
-  }
-  res.json(participant);
+export const getAllParticipantsDTOHandler = (req: express.Request, res: express.Response) => {
+    try {
+        const participantsDTO = getAllParticipantsDto();
+        console.info('Teilnehmerdaten abgerufen: ', participantsDTO)
+        return res.status(200).json(participantsDTO);
+    } catch (error) {
+        const errMsg = 'Fehler beim Abruf der Teilnehmerdaten'
+        console.error(error, errMsg);
+        return res.status(500).json({errMsg});
+    }
 };

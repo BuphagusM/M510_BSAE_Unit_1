@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Course } from '../model/course';
-import { fetchCourseById, fetchCourses } from '../services/courses-data-http-request';
+import {useEffect, useState} from 'react';
+import {CourseDTO} from '../model/course-dto.ts';
+import {fetchCourses} from '../services/courses-data-http-request';
 
 export const useCourses = () => {
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<CourseDTO[]>([]);
 
     useEffect(() => {
         fetchCourses()
@@ -11,18 +11,5 @@ export const useCourses = () => {
             .catch(err => console.error(err));
     }, []);
 
-    return { courses};
+    return {courses};
 };
-
-
-export const useCourseById = (id: number) => {
-    const [course, setCourse] = useState<Course | null>(null);
-
-    useEffect(() => {
-        fetchCourseById(id)
-            .then(data => setCourse(data))
-            .catch(err => console.error(err));
-    }, [id]);
-
-    return { course };
-}

@@ -1,18 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCourses } from '../hooks/useCourses'
 import { useParticipants } from '../hooks/useParticipants'
 
 function Participants(): React.ReactElement {
     const [searchColumn, setSearchColumn] = useState<'all' | 'name' | 'email' | 'course'>('all')
     const [searchQuery, setSearchQuery] = useState('')
     const { participants } = useParticipants()
-    const { courses } = useCourses()
 
-    const getCourseTitle = (courseId: number): string => {
-        const course = courses.find(c => c.id === courseId)
-        return course ? course.title : 'Unbekannter Kurs'
-    }
 
     const filteredParticipants = participants.filter(p =>
         /*// Oder auch Richtig für suche in allen Feldern (auch ID):
@@ -20,10 +14,10 @@ function Participants(): React.ReactElement {
         */
         (searchColumn === 'name') && p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (searchColumn === 'email') && p.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (searchColumn === 'course') && getCourseTitle(p.courseId).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (searchColumn === 'course') && p.coursesDetails.map(c => c.title).join(' ').toLowerCase().includes(searchQuery.toLowerCase()) ||
         // Für Suche in allen Feldern:
         searchColumn === 'all' &&
-        [p.name, p.email, getCourseTitle(p.courseId)].join(' ').toLowerCase().includes(searchQuery.toLowerCase())
+        [p.name, p.email, p.coursesDetails.map(c => c.title).join(' ')].join(' ').toLowerCase().includes(searchQuery.toLowerCase())
     )
 
     return (
@@ -73,9 +67,9 @@ function Participants(): React.ReactElement {
                             <tr key={participant.id}>
                                 <td>{participant.name}</td>
                                 <td>{participant.email}</td>
-                                <td>{getCourseTitle(participant.courseId)}</td>
+                                <td>{participant.coursesDetails.map(c => c.title).join(', ')}</td>
                                 <td>
-                                    <span className={participant.status === 'enrolled' || participant.status === 'active'? 'badge badge-active' : 'badge badge-inactive'}>
+                                    <span className={participant.status === 'completed' || participant.status === 'active'? 'badge badge-active' : 'badge badge-inactive'}>
                                         {participant.status}
                                     </span>
                                 </td>

@@ -8,7 +8,9 @@ function ParticipantDetail(): React.ReactElement {
     const { participants } = useParticipants()
     const { courses } = useCourses()
     const participant = participants.find(p => p.id === Number(id))
-    const course = courses.find(c => c.id === participant?.courseId)
+    // Course ID 
+
+    const course = courses.find(c => participant?.coursesDetails.some(cd => cd.id === c.id))
 
     if (!participant) {
         return (
@@ -17,8 +19,7 @@ function ParticipantDetail(): React.ReactElement {
                 <p style={{ marginTop: '20px', color: '#999' }}>Teilnehmer/in nicht gefunden.</p>
             </div>
         )
-    }
-   
+    }   
 
     return (
         <div>
@@ -32,19 +33,17 @@ function ParticipantDetail(): React.ReactElement {
                 </div>
                 <div className="detail-row">
                     <span className="detail-label">Status</span>
-                    <span className={participant.status === 'active' || participant.status === 'enrolled' ? 'badge badge-active' : 'badge badge-inactive'}>
+                    <span className={participant.status === 'active' || participant.status === 'completed' ? 'badge badge-active' : 'badge badge-inactive'}>
                         {participant.status}
                     </span>
                 </div>
                 <div className="detail-row">
                     <span className="detail-label">Zugewiesener Kurs</span>
-                    {course ? (
-                        <Link to={`/courses/${course.id}`} className="link-text">
-                            {course.title}
+                    {participant.coursesDetails.map(cd =>(
+                        <Link to={cd.id ? `/courses/${cd.id}` : '#'} className="link-text">
+                            {cd.title}
                         </Link>
-                    ) : (
-                        <span>Unbekannter Kurs</span>
-                    )}
+                    ))}
                 </div>
                 {course && (
                     <div className="detail-row">

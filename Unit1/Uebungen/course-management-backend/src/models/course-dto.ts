@@ -1,4 +1,6 @@
-export interface CourseEntity {
+import {ParticipantEntity} from "./participant-entity";
+
+export interface CourseDTO {
     id: number;
     title: string;
     date: string;
@@ -6,4 +8,5 @@ export interface CourseEntity {
     description: string;
     instructor: string;
     capacity: number;
+    participantsList: ParticipantEntity [];
 }

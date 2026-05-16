@@ -1,20 +1,17 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { useCourses } from '../hooks/useCourses'
-import { useParticipants } from '../hooks/useParticipants'
+import {Link, useParams} from 'react-router-dom'
+import {useCourses} from '../hooks/useCourses'
 
 function CourseDetail(): React.ReactElement {
-    const { id } = useParams<{ id: string }>()
-    const { courses } = useCourses()
+    const {id} = useParams<{ id: string }>()
+    const {courses} = useCourses()
     const course = courses.find(c => c.id === Number(id))
-    const { participants } = useParticipants()
-    const courseParticipants = participants.filter(p => p.courseId.toString() === id)
 
     if (!course) {
         return (
             <div>
                 <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
-                <p style={{ marginTop: '20px', color: '#999' }}>Kurs nicht gefunden.</p>
+                <p style={{marginTop: '20px', color: '#999'}}>Kurs nicht gefunden.</p>
             </div>
         )
     }
@@ -41,43 +38,44 @@ function CourseDetail(): React.ReactElement {
                 </div>
                 <div className="detail-row">
                     <span className="detail-label">Anzahl Teilnehmende</span>
-                    <span>{courseParticipants.length}</span>
+                    <span>{course.participantsList.length}</span>
                 </div>
             </div>
 
             <h2 className="section-title">Teilnehmende in diesem Kurs</h2>
 
-            {courseParticipants.length > 0 ? (
+            {course.participantsList.length > 0 ? (
                 <div className="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>E-Mail</th>
-                                <th>Status</th>
-                                <th>Aktionen</th>
-                            </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>E-Mail</th>
+                            <th>Status</th>
+                            <th>Aktionen</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {courseParticipants.map(p => (
-                                <tr key={p.id}>
-                                    <td>{p.name}</td>
-                                    <td>{p.email}</td>
-                                    <td>
-                                        <span className={p.status === 'enrolled' ? 'badge badge-active' : 'badge badge-inactive'}>
+                        {course.participantsList.map(p => (
+                            <tr key={p.id}>
+                                <td>{p.name}</td>
+                                <td>{p.email}</td>
+                                <td>
+                                        <span
+                                            className={p.status === 'completed' || p.status === 'active' ? 'badge badge-active' : 'badge badge-inactive'}>
                                             {p.status}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <Link to={`/participants/${p.id}`} className="btn-detail">Details</Link>
-                                    </td>
-                                </tr>
-                            ))}
+                                </td>
+                                <td>
+                                    <Link to={`/participants/${p.id}`} className="btn-detail">Details</Link>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
             ) : (
-                <p style={{ color: '#999', marginTop: '10px' }}>Keine Teilnehmenden für diesen Kurs.</p>
+                <p style={{color: '#999', marginTop: '10px'}}>Keine Teilnehmenden für diesen Kurs.</p>
             )}
         </div>
     )

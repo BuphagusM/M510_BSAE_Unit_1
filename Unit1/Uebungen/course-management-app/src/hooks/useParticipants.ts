@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Participant } from '../model/participant';
-import { fetchParticipants } from '../services/participants-data-http-request';
+import {useEffect, useState} from 'react';
+import {ParticipantDTO} from '../model/participant-dto.ts';
+import {fetchParticipants} from '../services/participants-data-http-request';
 
 export const useParticipants = () => {
-    const [participants, setParticipants] = useState<Participant[]>([]);
+    const [participants, setParticipants] = useState<ParticipantDTO[]>([]);
 
     useEffect(() => {
         fetchParticipants()
@@ -11,5 +11,5 @@ export const useParticipants = () => {
             .catch(err => console.error(err));
     }, []);
 
-    return { participants};
+    return {participants};
 };
