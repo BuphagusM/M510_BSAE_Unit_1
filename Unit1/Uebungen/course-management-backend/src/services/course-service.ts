@@ -18,3 +18,7 @@ export const getCourseCountByStatus = (status: 'active' | 'inactive' | 'all'): n
         return courseRepository.getCourseCountByStatusEntity(status);
     }
 };
+
+export const getRemoveCourseById = (id: number): void => {
+    courseRepository.removeCourseByIdEntity(id);
+}
