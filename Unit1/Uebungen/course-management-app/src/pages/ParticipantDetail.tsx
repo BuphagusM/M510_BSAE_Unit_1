@@ -54,6 +54,10 @@ function ParticipantDetail(): React.ReactElement {
                     </div>
                 )}
             </div>
+            <div className="action-buttons">
+                <button className='btn-edit'>Änderung speichern</button>
+                <button className='btn-delete'>Teilnehmer löschen</button>
+            </div>
         </div>
     )
 }

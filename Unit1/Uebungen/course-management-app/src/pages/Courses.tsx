@@ -41,6 +41,9 @@ function Courses(): React.ReactElement {
                         className="search-input"
                     />
                 </div>
+                <div className="action-buttons">
+                    <button className="btn-add">Kurs Hinzufügen</button>
+                </div>
             </div>
 
 

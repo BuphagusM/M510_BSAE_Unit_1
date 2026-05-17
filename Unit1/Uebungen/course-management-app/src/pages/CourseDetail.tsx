@@ -77,6 +77,11 @@ function CourseDetail(): React.ReactElement {
             ) : (
                 <p style={{color: '#999', marginTop: '10px'}}>Keine Teilnehmenden für diesen Kurs.</p>
             )}
+
+            <div className="action-buttons">
+                <button className='btn-edit'>Änderung speichern</button>
+                <button className='btn-delete'>Kurs löschen</button>
+            </div>
         </div>
     )
 }
