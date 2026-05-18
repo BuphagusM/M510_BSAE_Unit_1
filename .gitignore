@@ -1,5 +1,8 @@
 # .gitignore – gilt für den gesamten Workspace (alle Unterordner)
 
+# Persönliche Lernnotizen
+**/LEARNING.md
+
 # Dependencies
 **/node_modules/
 
