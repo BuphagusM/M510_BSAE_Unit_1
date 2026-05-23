@@ -2,6 +2,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import { CourseEntity } from '../models/course-entity';
+import {CourseDTO} from "../models/course-dto";
 
 const db = new Database(path.join(__dirname, '../../data/courses.db'));
 
@@ -47,9 +48,20 @@ export const getCourseTitlesByIdsEntity = (courseIds: number[]): CourseEntity[] 
   return db.prepare('SELECT * FROM courses WHERE id IN (' + courseIds.join(',') + ')').all() as CourseEntity[];
 };
 
-export const removeCourseByIdEntity = (id: number): void => {
-  db.prepare('DELETE FROM courses WHERE id = ?').run(id);
+export const removeCourseByIdEntity = (id: number) => {
+  return db.prepare('DELETE FROM courses WHERE id = ?').run(id);
 }
+
+export const updateCourseByIdEntity = (id: number, courseDTO: CourseDTO) => {
+  return db.prepare('UPDATE courses SET title = ?, date = ?, status = ?, description = ?, instructor = ?, capacity = ? WHERE id = ?')
+    .run(courseDTO.title, courseDTO.date, courseDTO.status, courseDTO.description, courseDTO.instructor, courseDTO.capacity, id);
+}
+
+export const createCourseEntity = (courseDTO: CourseDTO) => {
+  return db.prepare('INSERT INTO courses (title, date, status, description, instructor, capacity) VALUES (?, ?, ?, ?, ?, ?)')
+    .run(courseDTO.title, courseDTO.date, courseDTO.status, courseDTO.description, courseDTO.instructor, courseDTO.capacity);
+}
+
 
 export default db;
 

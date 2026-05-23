@@ -1,0 +1,60 @@
+info:
+  name: course_with_JSON_Body
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:3001/api/v1/courses/create
+  body:
+    type: json
+    data: |2-
+        {
+          "title": "Bruno Test Kurse ",
+          "status": "active",
+          "description": "Etwas weniges wissen wir",
+          "instructor": "Prof. Dozent und Dr.",
+          "capacity": 28,
+          "participantsList": []
+        }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Status 201 Created', () => {
+          expect(res.status).to.equal(201);
+        });
+
+        test('Antwortzeit unter 2000ms', () => {
+          expect(res.responseTime).to.be.below(2000);
+        });
+
+        test('Response ist JSON (content-type)', () => {
+          expect(res.headers['content-type']).to.include('application/json');
+        });
+
+        test('Response hat message-Feld', () => {
+          expect(res.body).to.have.property('message');
+        });
+
+        test('message ist ein String', () => {
+          expect(res.body.message).to.be.a('string');
+        });
+
+        test('message enthält "erstellt"', () => {
+          expect(res.body.message).to.include('erstellt');
+        });
+
+        test('message enthält eine numerische ID', () => {
+          const match = res.body.message.match(/\d+/);
+          expect(match).to.not.be.null;
+          expect(Number(match[0])).to.be.greaterThan(0);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

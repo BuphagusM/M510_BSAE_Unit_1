@@ -2,6 +2,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import {ParticipantEntity} from '../models/participant-entity';
+import {ParticipantDTO} from "../models/participant-dto";
 
 const db = new Database(path.join(__dirname, '../../data/participants.db'));
 
@@ -54,6 +55,22 @@ export const getParticipantsCountProCourseEntity = (courseId: number): number =>
         count: number
     };
     return row.count;
+}
+
+
+export function removeParticipantByIdEntity(id: number) {
+    return db.prepare('DELETE FROM participants WHERE id = ?').run(id);
+
+}
+
+export function updateParticipantByIdEntity(id: number, participantDTO: ParticipantDTO) {
+    return db.prepare('UPDATE participants SET name = ?, email = ?, status = ?, enrollmentDate = ? WHERE id = ?')
+        .run(participantDTO.name, participantDTO.email, participantDTO.status, participantDTO.enrollmentDate, id);
+}
+
+export function createParticipantEntity(participantDTO: ParticipantDTO) {
+    return db.prepare('INSERT INTO participants (name, email, status, enrollmentDate) VALUES (?, ?, ?, ?)')
+        .run(participantDTO.name, participantDTO.email, participantDTO.status, participantDTO.enrollmentDate);
 }
 
 

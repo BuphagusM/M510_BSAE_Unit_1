@@ -228,21 +228,43 @@ Diese App ist **bewusst nicht vollständig**. Die folgenden Features sind NICHT 
 
 ## Mögliche Erweiterungen für Studierende
 
+✅ Done
+❌ Ausestehende Erweiterungen (optional)
+⚠️ Erweiterungen mit zusätzlichem Aufwand
+
 ### Level 1 - Einfach
-1. Suchfeld für Kurse hinzufügen
-2. Filterfunktion nach Kursstatus
-3. Teilnehmerzahl pro Kurs auf dem Dashboard anzeigen
+1. Suchfeld für Kurse hinzufügen ✅
+2. Filterfunktion nach Kursstatus ✅
+3. Teilnehmerzahl pro Kurs auf dem Dashboard anzeigen ✅
 
 ### Level 2 - Mittelschwer
-4. Detailseite für jeden Kurs erstellen (mit allen Teilnehmenden)
+4. Detailseite für jeden Kurs erstellen (mit allen Teilnehmenden) ✅
 5. Formular zum Hinzufügen neuer Kurse (mit useState)
-6. Löschen-Button für Kurse mit Bestätigung
+6. Löschen-Button für Kurse mit Bestätigung ⚠️ (Error Handling als Bestätigung fehlt)
 
 ### Level 3 - Fortgeschrittene
-7. LocalStorage verwenden, um Daten persistent zu speichern
-8. Backend-Integration mit einer REST-API
-9. Teilnehmerstatus und weitere Informationen hinzufügen
-10. Erweiterte Filter und Sortierfunktionen
+7. LocalStorage verwenden, um Daten persistent zu speichern ❌
+8. Backend-Integration mit einer REST-API ✅
+9. Teilnehmerstatus und weitere Informationen hinzufügen ✅
+10. Erweiterte Filter und Sortierfunktionen ✅
+
+### Meine Erwartungen an mich 
+MVP:
+- 📚 SQLLight angewendet ✅
+- 📚 Kurse erfassen
+- 📚 Kurse bearbeiten
+- 📚 Teilnehmer hinzufügen
+- 📚 Teilnehmer bearbeiten
+- 📚 Erweiterte Fehlerbehandlung und Nutzerfeedback (z.B. Toasts) hinzufügen
+- 📚 PopUp variante aus den Lösungen mit Teilnehmenden Zahl selber probieren zu implementieren
+
+MPV+:
+- 📚 User Registrierung und Login-System implementieren
+- 📚 Rollenbasierte Zugriffskontrolle (Admin vs. Kursleitung) einführen
+- 📚 ClientKey-Validierung für API-Anfragen implementieren
+- 📚 Unit-Tests mit Jest und React Testing Library schreiben
+- 📚 Documentation Abschlussarbeits Niveau erstellen
+- 📚 Basics einer Arc42 Dokumentation erstellen (https://arc42.org/)
 
 ## Code-Standards für Erweiterungen
 

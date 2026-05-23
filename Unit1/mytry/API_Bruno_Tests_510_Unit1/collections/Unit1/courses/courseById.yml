@@ -1,0 +1,45 @@
+info:
+  name: courseById
+  type: http
+  seq: 2
+
+http:
+  method: DELETE
+  url: http://localhost:3001/api/v1/courses/10
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Status 200', () => {
+          expect(res.status).to.equal(200);
+        });
+
+        test('Antwortzeit unter 2000ms', () => {
+          expect(res.responseTime).to.be.below(2000);
+        });
+
+        test('Response ist JSON (content-type)', () => {
+          expect(res.headers['content-type']).to.include('application/json');
+        });
+
+        test('Response hat message-Feld', () => {
+          expect(res.body).to.have.property('message');
+        });
+
+        test('message ist ein String', () => {
+          expect(res.body.message).to.be.a('string');
+        });
+
+        test('message enthält die ID aus der URL', () => {
+          const urlParts = req.url.split('/');
+          const idFromUrl = urlParts[urlParts.length - 1];
+          expect(res.body.message).to.include(idFromUrl);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

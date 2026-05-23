@@ -2,8 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import {getDashboardDetailsInfo} from './controllers/dashboards-controller';
-import {getAllCoursesDTOHandler, removeCourseById} from './controllers/courses-controller';
-import {getAllParticipantsDTOHandler} from './controllers/ui-data-controller';
+import * as coursesController from './controllers/courses-controller';
+import * as participantsController from './controllers/participants-controller';
 
 const app = express();
 
@@ -35,11 +35,16 @@ const apiVersion = '/api/v1'
 app.get(apiVersion + '/dashboard/details', getDashboardDetailsInfo);
 
 // Kurs-Endpunkte
-app.get(apiVersion + '/courses', getAllCoursesDTOHandler);
-app.delete(apiVersion + '/courses/:courseId', removeCourseById)
+app.get(apiVersion + '/courses', coursesController.getAllCoursesDTOHandler);
+app.delete(apiVersion + '/courses/:courseId', coursesController.removeCourseById)
+app.put(apiVersion + '/courses/:courseId', coursesController.updateCourseById)
+app.post(apiVersion + '/courses/create', coursesController.createCourse)
 
 // Teilnehmer-Endpunkte
-app.get(apiVersion + '/participants', getAllParticipantsDTOHandler);
+app.get(apiVersion + '/participants', participantsController.getAllParticipantsDTOHandler);
+app.delete(apiVersion + '/participants/:participantId', participantsController.removeParticipantById)
+app.put(apiVersion + '/participants/:participantId', participantsController.updateParticipantById)
+app.post(apiVersion + '/participants/create', participantsController.createParticipant)
 
 
 app.listen(3001, () => {

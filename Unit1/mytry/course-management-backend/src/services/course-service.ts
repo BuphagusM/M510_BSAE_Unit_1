@@ -2,6 +2,7 @@
 
 import * as courseRepository from '../repositories/course-repository';
 import {CourseEntity} from '../models/course-entity';
+import {CourseDTO} from "../models/course-dto";
 
 export const getAllCourses = (): CourseEntity[] => {
     return courseRepository.getAllCoursesEntity();
@@ -21,4 +22,12 @@ export const getCourseCountByStatus = (status: 'active' | 'inactive' | 'all'): n
 
 export const getRemoveCourseById = (id: number): void => {
     courseRepository.removeCourseByIdEntity(id);
+}
+
+export const getUpdateCourseById = (id: number, course: CourseDTO): void => {
+    courseRepository.updateCourseByIdEntity(id, course);
+}
+
+export const getcreateCourse = (courseDTO: CourseDTO) => {
+    return courseRepository.createCourseEntity(courseDTO);
 }

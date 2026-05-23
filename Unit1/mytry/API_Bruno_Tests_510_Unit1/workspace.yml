@@ -1,0 +1,12 @@
+opencollection: 1.0.0
+info:
+  name: "510_Unit1_Bruno_Tests"
+  type: workspace
+
+collections:
+  - name: "Unit1"
+    path: "collections/Unit1"
+
+specs:
+
+docs: ''

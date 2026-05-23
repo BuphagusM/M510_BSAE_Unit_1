@@ -1,0 +1,38 @@
+info:
+  name: dashboard_details
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:3001/api/v1/dashboard/details
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Status 200', () => {
+          expect(res.status).to.equal(200);
+        });
+
+        test('Antwortzeit unter 2000ms', () => {
+          expect(res.responseTime).to.be.below(2000);
+        });
+
+        test('Response ist JSON (content-type)', () => {
+          expect(res.headers['content-type']).to.include('application/json');
+        });
+
+        test('Kurs hat korrekte property', () => {
+          expect(res.body).to.have.property('totalActiveCourses');
+          expect(res.body).to.have.property('totalCourses');
+          expect(res.body).to.have.property('totalParticipants');
+          expect(res.body).to.have.property('totalActiveParticipants');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

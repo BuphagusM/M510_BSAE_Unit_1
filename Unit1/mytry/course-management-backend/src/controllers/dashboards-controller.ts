@@ -1,4 +1,4 @@
-// ui-data-controller.ts
+// participants-controller.ts
 import express from 'express';
 import {getAllCourses, getCourseById, getCourseCountByStatus} from '../services/course-service';
 import {getAllParticipants, getParticipantById, getParticipantCountByStatus} from '../services/participant-service';
