@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import {getDashboardDetailsInfo} from './controllers/dashboards-controller';
-import {getAllCoursesDTOHandler} from './controllers/courses-controller';
+import {getAllCoursesDTOHandler, removeCourseById} from './controllers/courses-controller';
 import {getAllParticipantsDTOHandler} from './controllers/ui-data-controller';
 
 const app = express();
@@ -36,6 +36,7 @@ app.get(apiVersion + '/dashboard/details', getDashboardDetailsInfo);
 
 // Kurs-Endpunkte
 app.get(apiVersion + '/courses', getAllCoursesDTOHandler);
+app.delete(apiVersion + '/courses/:courseId', removeCourseById)
 
 // Teilnehmer-Endpunkte
 app.get(apiVersion + '/participants', getAllParticipantsDTOHandler);

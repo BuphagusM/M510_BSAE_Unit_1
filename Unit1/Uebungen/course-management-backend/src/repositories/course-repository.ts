@@ -47,5 +47,9 @@ export const getCourseTitlesByIdsEntity = (courseIds: number[]): CourseEntity[] 
   return db.prepare('SELECT * FROM courses WHERE id IN (' + courseIds.join(',') + ')').all() as CourseEntity[];
 };
 
+export const removeCourseByIdEntity = (id: number): void => {
+  db.prepare('DELETE FROM courses WHERE id = ?').run(id);
+}
+
 export default db;
 

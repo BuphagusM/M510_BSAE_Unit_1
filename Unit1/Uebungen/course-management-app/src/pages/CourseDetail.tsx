@@ -1,10 +1,11 @@
 import React from 'react'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
 
 function CourseDetail(): React.ReactElement {
     const {id} = useParams<{ id: string }>()
-    const {courses} = useCourses()
+    const navigate = useNavigate()
+    const {courses, deleteCourse} = useCourses()
     const course = courses.find(c => c.id === Number(id))
 
     if (!course) {
@@ -77,6 +78,15 @@ function CourseDetail(): React.ReactElement {
             ) : (
                 <p style={{color: '#999', marginTop: '10px'}}>Keine Teilnehmenden für diesen Kurs.</p>
             )}
+
+            <div className="action-buttons">
+                <button className='btn-edit'>Änderung speichern</button>
+                <button className='btn-delete' onClick={() =>
+                    deleteCourse(course.id)
+                        .then(() => navigate('/courses'))
+                        .catch(err => console.error(err))
+                }>Kurs löschen</button>
+            </div>
         </div>
     )
 }
