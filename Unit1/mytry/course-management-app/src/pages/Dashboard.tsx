@@ -20,11 +20,11 @@ function Dashboard(): React.ReactElement {
                     <div className="stat-label">Aktive Kurse</div>
                 </div>
                 <div className="stat-box">
-                    <div className="stat-number">{dashboardDetailInfo?.totalParticipants}</div>
+                    <div className="stat-number">{dashboardDetailInfo?.totalParticipants ||0}</div>
                     <div className="stat-label">Teilnehmende</div>
                 </div>
                 <div className="stat-box">
-                    <div className="stat-number">{dashboardDetailInfo?.totalActiveParticipants}</div>
+                    <div className="stat-number">{dashboardDetailInfo?.totalActiveParticipants || 0 }</div>
                     <div className="stat-label">Aktive Teilnehmende</div>
                 </div>
             </div>
