@@ -1,17 +1,22 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
+import {Table, TableHead, TableRow, TableCell, TableBody, Modal, Chip} from '@mui/material'
+import Box from '@mui/material/Box'
+import CourseDetailView from '../components/CourseDetailView'
+import {CourseDTO} from '../model/course-dto'
 
 function Courses(): React.ReactElement {
     const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
     const [searchQuery, setSearchQuery] = useState('')
     const {courses} = useCourses()
+    const [selectedCourse, setSelectedCourse] = useState<CourseDTO | null>(null)
 
     const filteredCourses = courses.filter(c =>
         ((statusFilter === 'all') ||
-        (statusFilter === 'active' && c.status === 'active') ||
-        (statusFilter === 'inactive' && c.status === 'inactive')) &&
-        [c.title,c.date, c.instructor].join(' ').toLowerCase().includes(searchQuery.toLowerCase())
+            (statusFilter === 'active' && c.status === 'active') ||
+            (statusFilter === 'inactive' && c.status === 'inactive')) &&
+        [c.title, c.date, c.instructor].join(' ').toLowerCase().includes(searchQuery.toLowerCase())
     )
 
     return (
@@ -46,47 +51,64 @@ function Courses(): React.ReactElement {
                 </div>
             </div>
 
-
-            <div className="table-container">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Kurstitel</th>
-                        <th>Datum</th>
-                        <th>Dozent</th>
-                        <th>Status</th>
-                        <th>Teilnehmende</th>
-                        <th>Aktionen</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Kurstitel</TableCell>
+                        <TableCell>Datum</TableCell>
+                        <TableCell>Dozent</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Teilnehmende</TableCell>
+                        <TableCell>Aktionen</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {filteredCourses.map(course => (
-                        <tr key={course.id}>
-                            <td>{course.title}</td>
-                            <td>{new Date(course.date).toLocaleDateString('de-DE')}</td>
-                            <td>{course.instructor}</td>
-                            <td>
-                                    <span
-                                        className={course.status === 'active' ? 'badge badge-active' : 'badge badge-inactive'}>
-                                        {course.status}
-                                    </span>
-                            </td>
-                            <td>{course.participantsList.length}</td>
-                            <td>
-                                <Link to={`/courses/${course.id}`} className="btn-detail">Details</Link>
-                            </td>
-                        </tr>
+                        <TableRow key={course.id} onClick={() => setSelectedCourse(course)}>
+                            <TableCell>{course.title}</TableCell>
+                            <TableCell>{new Date(course.date).toLocaleDateString('de-DE')}</TableCell>
+                            <TableCell>{course.instructor}</TableCell>
+                            <TableCell>
+                                <Chip
+                                    label={course.status}
+                                    color={course.status === 'active' ? 'success' : 'default'}
+                                    size="small"
+                                />
+                            </TableCell>
+                            <TableCell>
+                                {course.participantsList.length}/{course.capacity}
+                            </TableCell>
+                            <TableCell>
+                                <Link to={`/courses/${course.id}`} className="btn-detail">Bearbeiten</Link>
+                            </TableCell>
+                        </TableRow>
                     ))}
                     {filteredCourses.length === 0 && (
-                        <tr>
-                            <td colSpan={5} style={{textAlign: 'center', padding: '20px', color: '#999'}}>
+                        <TableRow>
+                            <TableCell colSpan={6} sx={{textAlign: 'center', py: 4}}>
                                 Keine Kurse gefunden.
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     )}
-                    </tbody>
-                </table>
-            </div>
+                </TableBody>
+            </Table>
+
+            <Modal open={!!selectedCourse} onClose={() => setSelectedCourse(null)}>
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 560, maxHeight: '80vh', overflowY: 'auto',
+                    bgcolor: 'background.paper', borderRadius: 2,
+                    boxShadow: 24, p: 4,
+                }}>
+                    {selectedCourse && (
+                        <CourseDetailView
+                            course={selectedCourse}
+                            onClose={() => setSelectedCourse(null)}
+                        />
+                    )}
+                </Box>
+            </Modal>
         </div>
     )
 }

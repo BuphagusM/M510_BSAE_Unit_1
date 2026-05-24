@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {CourseDTO} from '../model/course-dto.ts';
-import {fetchCourses, fetchRemoveCourseById} from '../services/courses-data-http-request';
+import {fetchCourses, fetchRemoveCourseById, fetchUpdateCourseById} from '../services/courses-data-http-request';
 
 export const useCourses = () => {
     const [courses, setCourses] = useState<CourseDTO[]>([]);
@@ -11,10 +11,15 @@ export const useCourses = () => {
             .catch(err => console.error(err));
     }, []);
 
-    const deleteCourse = (courseId: number): Promise<void> => {
-        return fetchRemoveCourseById(courseId)
-            .then(() => setCourses(prev => prev.filter(c => c.id !== courseId)));
+    const deleteCourse = async (courseId: number): Promise<void> => {
+        await fetchRemoveCourseById(courseId)
+        setCourses(prev => prev.filter(c => c.id !== courseId));
     };
 
-    return {courses, deleteCourse};
+    const updateCourse = async (courseDTO: CourseDTO): Promise<void> => {
+        await fetchUpdateCourseById(courseDTO.id, courseDTO)
+        setCourses(prev => prev.map(c => c.id === courseDTO.id ? courseDTO : c))
+    };
+
+    return {courses, deleteCourse, updateCourse};
 };
