@@ -6,9 +6,10 @@ import {useCourses} from './useCourses'
 
 export const useCourseDetailForm = (course: CourseDTO | undefined) => {
     const navigate = useNavigate()
-    const {deleteCourse, updateCourse} = useCourses()
+    const {deleteCourse, updateCourse, createCourse} = useCourses()
 
     const [formData, setFormData] = useState({
+        id: course?.id ?? 0,
         title: course?.title ?? '',
         date: course?.date ?? '',
         status: course?.status ?? 'active',
@@ -21,6 +22,7 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
     React.useEffect(() => {
         if (course) {
             setFormData({
+                id: course.id,
                 title: course.title,
                 date: course.date,
                 status: course.status,
@@ -54,6 +56,13 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
             .catch(err => console.error(err))
     }
 
-    return {formData, handleChange, handleSelectChange, handleSubmit, handleDelete}
+    const handleCreate = (e: React.FormEvent) => {
+        e.preventDefault()
+        createCourse({...formData})
+            .then(() => navigate('/courses'))
+            .catch(err => console.error(err))
+    }
+
+    return {formData, handleChange, handleSelectChange, handleSubmit, handleDelete, handleCreate}
 }
 

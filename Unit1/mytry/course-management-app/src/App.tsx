@@ -17,6 +17,7 @@ function App(): React.ReactElement {
             <Route path="/" element={<Dashboard />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
+            <Route path="/courses/create" element={<CourseDetail />} />
             <Route path="/participants" element={<Participants />} />
             <Route path="/participants/:id" element={<ParticipantDetail />} />
           </Routes>

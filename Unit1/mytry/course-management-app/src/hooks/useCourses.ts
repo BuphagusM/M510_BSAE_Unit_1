@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {CourseDTO} from '../model/course-dto.ts';
-import {fetchCourses, fetchRemoveCourseById, fetchUpdateCourseById} from '../services/courses-data-http-request';
+import {fetchCourses, fetchRemoveCourseById, fetchUpdateCourseById, fetchCreateCourse} from '../services/courses-data-http-request';
+import { CourseEntity } from '../model/course-entity.ts';
 
 export const useCourses = () => {
     const [courses, setCourses] = useState<CourseDTO[]>([]);
@@ -21,5 +22,12 @@ export const useCourses = () => {
         setCourses(prev => prev.map(c => c.id === courseDTO.id ? courseDTO : c))
     };
 
-    return {courses, deleteCourse, updateCourse};
+    const createCourse = async (courseEntity: CourseEntity): Promise<void> => {
+        await fetchCreateCourse(courseEntity)
+        fetchCourses()
+            .then(data => setCourses(data))
+            .catch(err => console.error(err));
+    };
+
+    return {courses, deleteCourse, updateCourse, createCourse};
 };

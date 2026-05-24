@@ -2,15 +2,43 @@ import React from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
 import {useCourseDetailForm} from '../hooks/useCourseDetailForm'
-import {TextField, Select, MenuItem, FormControl, InputLabel, Button, Stack, Typography, Table, TableHead, TableRow, TableCell, TableBody, Chip} from '@mui/material'
+import {
+    TextField,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Button,
+    Stack,
+    Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Chip
+} from '@mui/material'
+import {useLocation} from "react-router-dom";
+import {CourseDTO} from '../model/course-dto'
 
 function CourseDetail(): React.ReactElement {
     const {id} = useParams<{ id: string }>()
+    const location = useLocation().pathname.endsWith('/create');
     const {courses} = useCourses()
-    const course = courses.find(c => c.id === Number(id))
-    const {formData, handleChange, handleSelectChange, handleSubmit, handleDelete} = useCourseDetailForm(course)
+    const newCourseTemplate: CourseDTO = {
+        id: 0,
+        title: 'Neuen Kurs anlegen',
+        date: '',
+        status: 'active',
+        description: '',
+        instructor: '',
+        capacity: 0,
+        participantsList: []
+    }
+    const course = location ? newCourseTemplate : courses.find(c => c.id === Number(id))
+    const {formData, handleChange, handleSelectChange, handleSubmit, handleDelete, handleCreate} = useCourseDetailForm(course)
 
-    if (!course) {
+    if (!course && !!id) {
         return (
             <div>
                 <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
@@ -22,7 +50,7 @@ function CourseDetail(): React.ReactElement {
     return (
         <div>
             <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
-            <h1 className="page-title">{course.title}</h1>
+            <h1 className="page-title">{formData.title}</h1>
 
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} sx={{mt: 2, mb: 3}}>
@@ -47,7 +75,7 @@ function CourseDetail(): React.ReactElement {
                         <Select
                             labelId="status-label"
                             name="status"
-                            value={formData.status}
+                            value={formData.status || 'active'}
                             label="Status"
                             onChange={handleSelectChange}
                         >
@@ -58,7 +86,7 @@ function CourseDetail(): React.ReactElement {
                     <TextField
                         label="Beschreibung"
                         name="description"
-                        value={formData.description}
+                        value={formData.description || ''}
                         onChange={handleChange}
                         fullWidth
                         multiline
@@ -67,7 +95,7 @@ function CourseDetail(): React.ReactElement {
                     <TextField
                         label="Dozent"
                         name="instructor"
-                        value={formData.instructor}
+                        value={formData.instructor || ''}
                         onChange={handleChange}
                         fullWidth
                     />
@@ -75,7 +103,7 @@ function CourseDetail(): React.ReactElement {
                         label="Kapazität"
                         name="capacity"
                         type="number"
-                        value={formData.capacity}
+                        value={formData.capacity || ''}
                         onChange={handleChange}
                         fullWidth
                     />
@@ -86,58 +114,80 @@ function CourseDetail(): React.ReactElement {
                         slotProps={{input: {readOnly: true}}}
                     />
                 </Stack>
-
-                <Stack direction="row" spacing={2} sx={{mb: 3}}>
-                    <Button type="submit" variant="contained" color="primary">
-                        Änderung speichern
-                    </Button>
-                    <Button type="button" variant="contained" color="error" onClick={handleDelete}>
-                        Kurs löschen
-                    </Button>
-                </Stack>
+                {location ? (
+                    <Stack direction="row" spacing={2} sx={{mb: 3}}>
+                        <Button type="button" variant="contained" color="success" onClick={handleCreate}>
+                            Erfassen
+                        </Button>
+                    </Stack>
+                ) : (
+                    <Stack direction="row" spacing={2} sx={{mb: 3}}>
+                        <Button type="submit" variant="contained" color="primary">
+                            Änderung speichern
+                        </Button>
+                        <Button type="button" variant="contained" color="error" onClick={handleDelete}>
+                            Kurs löschen
+                        </Button>
+                    </Stack>
+                )}
             </form>
+            {!location ? (
+                <>
+                    <Typography variant="h5" sx={{mt: 4, mb: 2}}>
+                        Teilnehmende in diesem Kurs
+                    </Typography>
 
-            <Typography variant="h5" sx={{mt: 4, mb: 2}}>Teilnehmende in diesem Kurs</Typography>
+                    {course && course.participantsList.length > 0 ? (
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>E-Mail</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Aktionen</TableCell>
+                                </TableRow>
+                            </TableHead>
 
-            {course.participantsList.length > 0 ? (
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>E-Mail</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Aktionen</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {course.participantsList.map(p => (
-                            <TableRow key={p.id}>
-                                <TableCell>{p.name}</TableCell>
-                                <TableCell>{p.email}</TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={p.status}
-                                        color={p.status === 'completed' || p.status === 'active' ? 'success' : 'default'}
-                                        size="small"
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <Button
-                                        component={Link}
-                                        to={`/participants/${p.id}`}
-                                        variant="outlined"
-                                        size="small"
-                                    >
-                                        Details
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            ) : (
-                <Typography color="text.secondary" sx={{mt: 1}}>Keine Teilnehmenden für diesen Kurs.</Typography>
-            )}
+                            <TableBody>
+                                {course.participantsList.map((p) => (
+                                    <TableRow key={p.id}>
+                                        <TableCell>{p.name}</TableCell>
+
+                                        <TableCell>{p.email}</TableCell>
+
+                                        <TableCell>
+                                            <Chip
+                                                label={p.status}
+                                                color={
+                                                    p.status === "completed" || p.status === "active"
+                                                        ? "success"
+                                                        : "default"
+                                                }
+                                                size="small"
+                                            />
+                                        </TableCell>
+
+                                        <TableCell>
+                                            <Button
+                                                component={Link}
+                                                to={`/participants/${p.id}`}
+                                                variant="outlined"
+                                                size="small"
+                                            >
+                                                Details
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <Typography color="text.secondary" sx={{mt: 1}}>
+                            Keine Teilnehmenden für diesen Kurs.
+                        </Typography>
+                    )}
+                </>
+            ) : null}
         </div>
     )
 }

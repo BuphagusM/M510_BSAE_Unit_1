@@ -1,5 +1,6 @@
 // courses-data-http-request.ts
 import {CourseDTO} from '../model/course-dto.ts';
+import { CourseEntity } from '../model/course-entity.ts';
 
 
 export const fetchCourses = async (): Promise<CourseDTO[]> => {
@@ -28,6 +29,18 @@ export const fetchRemoveCourseById = async (courseId: number): Promise<string> =
     });
     if (!response.ok) {
         throw new Error(`Fehler beim Löschen des Kurses: ${response.status}`);
+    }
+    return response.text();
+}
+
+export const fetchCreateCourse = async (courseEntity: CourseEntity): Promise<string> => {
+    const response = await fetch(`http://localhost:3001/api/v1/courses/create`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(courseEntity),
+    });
+    if (!response.ok) {
+        throw new Error(`Fehler beim Erstellen des Kurses: ${response.status}`);
     }
     return response.text();
 }

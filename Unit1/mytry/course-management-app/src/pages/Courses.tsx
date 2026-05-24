@@ -1,7 +1,20 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
-import {Table, TableHead, TableRow, TableCell, TableBody, Modal, Chip} from '@mui/material'
+import {
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Modal,
+    Chip,
+    Button,
+    Select,
+    MenuItem,
+    InputLabel,
+    TextField
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import CourseDetailView from '../components/CourseDetailView'
 import {CourseDTO} from '../model/course-dto'
@@ -22,33 +35,34 @@ function Courses(): React.ReactElement {
     return (
         <div>
             <h1 className="page-title">Kurse</h1>
-
             <div className="filter-container">
-                <div className="filter-bar">
-                    <label htmlFor="status-filter" className="filter-label">Status:</label>
-                    <select
-                        id="status-filter"
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
-                        className="filter-select"
-                    >
-                        <option value="all">Alle</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-                <div className="search-bar">
-                    <input
-                        type="text"
-                        placeholder="Kurse suchen..."
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-                <div className="action-buttons">
-                    <button className="btn-add">Kurs Hinzufügen</button>
-                </div>
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                    value={statusFilter}
+                    onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
+                    displayEmpty
+                    className="status-filter"
+                >
+                    <MenuItem value="all">Alle</MenuItem>
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inactive">Inactive</MenuItem>
+
+                </Select>
+                <TextField
+                    label="Kurs suchen"
+                    name="search"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    sx={{width:'60%', ml: 2}}
+                />
+                <Button
+                    component={Link}
+                    to={`/courses/create`}
+                    variant="outlined"
+                    size="small"
+                >
+                    Kurs Hinzufügen
+                </Button>
             </div>
 
             <Table>
