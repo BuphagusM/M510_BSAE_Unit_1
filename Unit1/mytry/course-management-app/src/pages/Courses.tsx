@@ -14,7 +14,8 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography
+    Typography,
+    Tooltip
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import CourseDetailView from '../components/CourseDetailView'
@@ -40,6 +41,7 @@ function Courses(): React.ReactElement {
                    sx={{
                        mb: 2
                    }}>
+                <Tooltip title="Kurs mit Status" placement="bottom">
                 <Select
                     value={statusFilter}
                     onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
@@ -50,6 +52,7 @@ function Courses(): React.ReactElement {
                     <MenuItem value="active">Active</MenuItem>
                     <MenuItem value="inactive">Inactive</MenuItem>
                 </Select>
+                </Tooltip>
                 <TextField
                     label="Kurs suchen"
                     name="search"

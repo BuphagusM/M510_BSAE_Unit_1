@@ -28,7 +28,7 @@ function Dashboard(): React.ReactElement {
 
     return (
         <Stack>
-            <h1 className="page-title">Dashboard</h1>
+            <Typography variant='h3'>Dashboard</Typography>
 
             <Stack direction="row" spacing={3}>
                 {/* eine Card designen und die Werte aus den Dashboard-Detailinformationen anzeigen */}

@@ -1,11 +1,26 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useParticipants} from '../hooks/useParticipants'
+import {
+    Button,
+    Chip,
+    MenuItem,
+    Select,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField,
+    Tooltip,
+    Typography
+} from '@mui/material'
 
 function Participants(): React.ReactElement {
     const [searchColumn, setSearchColumn] = useState<'all' | 'name' | 'email' | 'course'>('all')
     const [searchQuery, setSearchQuery] = useState('')
-    const { participants } = useParticipants()
+    const {participants} = useParticipants()
 
 
     const filteredParticipants = participants.filter(p =>
@@ -21,74 +36,82 @@ function Participants(): React.ReactElement {
     )
 
     return (
-        <div>
-            <h1 className="page-title">Teilnehmende</h1>
-
-            <div className="filter-container">
-                <div className="filter-bar" >
-                    <label htmlFor="status-filter" className="filter-label">Suche in Spalte:</label>
-                    <select
-                        id="search-query"
+        <Stack>
+            <Typography variant='h3'>Teilnehmende</Typography>
+            <Stack direction="row"
+                   sx={{
+                       mb: 2
+                   }}>
+                <Tooltip title="Suche in Spalte" placement="bottom">
+                    <Select
                         value={searchColumn}
                         onChange={e => setSearchColumn(e.target.value as 'all' | 'name' | 'email' | 'course')}
-                        className="filter-select"
+                        displayEmpty
+                        className="status-filter"
                     >
-                        <option value="all">Alle</option>
-                        <option value="name">Name</option>
-                        <option value="email">E-Mail</option>
-                        <option value="course">Kurs</option>
-                    </select>
-                </div>
+                        <MenuItem value="all">Alle</MenuItem>
+                        <MenuItem value="name">Name</MenuItem>
+                        <MenuItem value="email">E-Mail</MenuItem>
+                        <MenuItem value="course">Kurs</MenuItem>
+                    </Select>
+                </Tooltip>
+                <TextField
+                    label="Teilnehmende suchen..."
+                    name="search"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    sx={{width: '60%', ml: 2}}
+                />
+                <Button
+                    component={Link}
+                    to={`/participants/create`}
+                    variant="outlined"
+                    size="large"
+                    sx={{ml: 2}}
+                >
+                    Teilnehmer erfassen
+                </Button>
+            </Stack>
 
-                <div className="search-bar" >
-                    <input
-                        type="text"
-                        placeholder="Teilnehmende suchen..."
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-            </div>
-
-            <div className="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>E-Mail</th>
-                            <th>Zugewiesener Kurs</th>
-                            <th>Status</th>
-                            <th>Aktionen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredParticipants.map(participant => (
-                            <tr key={participant.id}>
-                                <td>{participant.name}</td>
-                                <td>{participant.email}</td>
-                                <td>{participant.coursesDetails.map(c => c.title).join(', ')}</td>
-                                <td>
-                                    <span className={participant.status === 'completed' || participant.status === 'active'? 'badge badge-active' : 'badge badge-inactive'}>
-                                        {participant.status}
-                                    </span>
-                                </td>
-                                <td>
-                                    <Link to={`/participants/${participant.id}`} className="btn-detail">Details</Link>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredParticipants.length === 0 && (
-                            <tr>
-                                <td colSpan={5} className="empty-table">
-                                    Keine Teilnehmenden gefunden.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>E-Mail</TableCell>
+                        <TableCell>Zugewiesener Kurs</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Aktionen</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {filteredParticipants.map(participant => (
+                        <TableRow key={participant.id}>
+                            <TableCell>{participant.name}</TableCell>
+                            <TableCell>{participant.email}</TableCell>
+                            <TableCell>{participant.coursesDetails.map(c => c.title).join(', ')}</TableCell>
+                            <TableCell>
+                                <Chip
+                                    label={participant.status}
+                                    color={participant.status === 'completed' || participant.status === 'active' ? 'success' : 'default'}
+                                    size='small'
+                                    sx={{minWidth: 100}}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Link to={`/participants/${participant.id}`} className="btn-detail">Details</Link>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    {filteredParticipants.length === 0 && (
+                        <TableRow>
+                            <TableCell colSpan={5} align="center">
+                                Keine Teilnehmenden gefunden.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </Stack>
     )
 }
 
