@@ -46,15 +46,17 @@ function CourseDetail(): React.ReactElement {
 
     if (!course && !!id) {
         return (
-            <div>
-                <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
-                <p style={{marginTop: '20px', color: '#999'}}>Kurs nicht gefunden.</p>
-            </div>
+            <Stack>
+                <Link to="/participants" className="btn-back">← Zurück zu Kursen</Link>
+                <Typography variant="body1" sx={{marginTop: '20px', color: '#999'}}>
+                    Kurs nicht gefunden
+                </Typography>
+            </Stack>
         )
     }
 
     return (
-        <div>
+        <Stack>
             <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
             <h1 className="page-title">{formData.title}</h1>
 
@@ -194,7 +196,7 @@ function CourseDetail(): React.ReactElement {
                     )}
                 </>
             ) : null}
-        </div>
+        </Stack>
     )
 }
 

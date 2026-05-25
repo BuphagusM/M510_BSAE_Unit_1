@@ -8,3 +8,37 @@ export const fetchParticipants = async (): Promise<ParticipantDTO[]> => {
     }
     return response.json() as Promise<ParticipantDTO[]>;
 };
+
+export const fetchRemoveParticipantById = async (id: number): Promise<string> => {
+    const response = await fetch(`http://localhost:3001/api/v1/participants/${id}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        throw new Error(`Fehler beim Löschen des Teilnehmers: ${response.status}`);
+    }
+    return response.text();
+};
+
+export const fetchUpdateParticipantById = async (id: number, updatedParticipant: ParticipantDTO): Promise<string> => {
+    const response = await fetch(`http://localhost:3001/api/v1/participants/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(updatedParticipant)
+    });
+    if (!response.ok) {
+        throw new Error(`Fehler beim Aktualisieren des Teilnehmers: ${response.status}`);
+    }
+    return response.text();
+};
+
+export const fetchCreateParticipant = async (participantDTO: ParticipantDTO): Promise<string> => {
+    const response = await fetch('http://localhost:3001/api/v1/participants/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(participantDTO)
+    });
+    if (!response.ok) {
+        throw new Error(`Fehler beim Erstellen des Teilnehmers: ${response.status}`);
+    }
+    return response.text();
+};
