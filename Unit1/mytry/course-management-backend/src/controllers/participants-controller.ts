@@ -2,7 +2,12 @@
 import express from 'express';
 import {getAllParticipantsDto} from '../services/dto-service';
 import {ParticipantEntity} from "../models/participant-entity";
-import {getParticipantById, getRemoveParticipantById, getCreateParticipant, getUpdateParticipantById} from "../services/participant-service";
+import {
+    getCreateParticipant,
+    getParticipantById,
+    getRemoveParticipantById,
+    getUpdateParticipantById
+} from "../services/participant-service";
 import {ParticipantDTO} from "../models/participant-dto";
 
 // Teilnehmer-Handler
@@ -10,7 +15,7 @@ import {ParticipantDTO} from "../models/participant-dto";
 export const getAllParticipantsDTOHandler = (req: express.Request, res: express.Response) => {
     try {
         const participantsDTO = getAllParticipantsDto();
-        console.info('Teilnehmerdaten abgerufen: ', participantsDTO)
+        console.info('Teilnehmerdaten abgerufen: ', participantsDTO.length)
         return res.status(200).json(participantsDTO);
     } catch (error) {
         const errMsg = 'Fehler beim Abruf der Teilnehmerdaten'
@@ -44,14 +49,14 @@ export const updateParticipantById = (req: express.Request, res: express.Respons
         const participantsDto : ParticipantDTO = req.body;
         const participant = getParticipantById(Number(participantId)) as ParticipantEntity;
         if (!participant) {
-            const errMsg = `Teilnehmer mit ID ${participantId} nicht gefunden`;
+            const errMsg = `Teilnehmer ${participantsDto.name} mit ID ${participantId} nicht gefunden`;
             console.warn(errMsg);
             return res.status(404).json({errMsg});
         }
         if (participantId === participantsDto.id.toString()) {
             getUpdateParticipantById(participant.id, participantsDto)
-            console.info(`Teilnehmer mit ID ${participantId} aktualisiert`); // Log-Ausgabe der Aktualisierungsaktion
-            return res.status(200).json({message: `Teilnehmer mit ID ${participantId} aktualisiert`});
+            console.info(`Teilnehmer ${participant.name} mit ID ${participantId} aktualisiert`); // Log-Ausgabe der Aktualisierungsaktion
+            return res.status(200).json({message: `Teilnehmer ${participantsDto.name} mit ID ${participantId} aktualisiert`});
         }
     } catch (error) {
         const errMsg = 'Fehler beim Aktualisieren des Teilnehmers';
@@ -65,7 +70,7 @@ export const createParticipant = (req: express.Request, res: express.Response) =
         const participantDTO: ParticipantDTO = req.body;
         if (participantDTO.name && participantDTO.email) {
             const newParticipantsId = getCreateParticipant(participantDTO).lastInsertRowid;
-            console.info(`Teilnehmer mit ID ${newParticipantsId} erstellt`); // Log-Ausgabe der Erstellung
+            console.info(`Teilnehmer ${participantDTO.name} mit ID ${newParticipantsId} erstellt`); // Log-Ausgabe der Erstellung
             return res.status(201).json({message: `Teilnehmer mit ID ${newParticipantsId} erstellt`});
         } else {
             const errMsg = 'Ungültige Teilnehmerdaten: Name und E-Mail sind erforderlich';

@@ -6,7 +6,6 @@ import {
     fetchRemoveCourseById,
     fetchUpdateCourseById
 } from '../services/courses-data-http-request';
-import {CourseEntity} from '../model/course-entity.ts';
 
 export const useCourses = () => {
     const [courses, setCourses] = useState<CourseDTO[]>([]);
@@ -27,8 +26,8 @@ export const useCourses = () => {
         setCourses(prev => prev.map(c => c.id === courseDTO.id ? courseDTO : c))
     };
 
-    const createCourse = async (courseEntity: CourseEntity): Promise<void> => {
-        await fetchCreateCourse(courseEntity)
+    const createCourse = async (courseDTO: CourseDTO): Promise<void> => {
+        await fetchCreateCourse(courseDTO)
         fetchCourses()
             .then(data => setCourses(data))
             .catch(err => console.error(err));

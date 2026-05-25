@@ -16,6 +16,7 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
         description: course?.description ?? '',
         instructor: course?.instructor ?? '',
         capacity: course?.capacity ?? 0,
+        participantsList: course?.participantsList ?? []
     })
 
     // formData aktualisieren sobald course geladen wurde
@@ -29,6 +30,7 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
                 description: course.description,
                 instructor: course.instructor,
                 capacity: course.capacity,
+                participantsList: course.participantsList
             })
         }
     }, [course?.id])
@@ -58,7 +60,7 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
 
     const handleCreate = (e: React.FormEvent) => {
         e.preventDefault()
-        createCourse({...formData})
+        createCourse(formData)
             .then(() => navigate('/courses'))
             .catch(err => console.error(err))
     }
