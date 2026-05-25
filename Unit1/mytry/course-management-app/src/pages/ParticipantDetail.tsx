@@ -64,9 +64,11 @@ function ParticipantDetail(): React.ReactElement {
                     <TextField
                         label="einschreibedatum"
                         name="enrollmentDate"
+                        type="date"
                         value={formData.enrollmentDate}
                         onChange={handleChange}
                         fullWidth
+                        slotProps={{inputLabel: {shrink: true}}}
                     />
                     <FormControl fullWidth>
                         <InputLabel id="status-label">Status</InputLabel>

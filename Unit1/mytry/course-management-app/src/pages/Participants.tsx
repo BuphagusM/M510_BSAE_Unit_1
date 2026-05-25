@@ -85,12 +85,13 @@ function Participants(): React.ReactElement {
                         <TableCell>E-Mail</TableCell>
                         <TableCell>Zugewiesener Kurs</TableCell>
                         <TableCell>Status</TableCell>
+                        <TableCell>Einschreibedatum</TableCell>
                         <TableCell>Aktionen</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {filteredParticipants.map(participant => (
-                        <TableRow key={participant.id} onClick={()=> setSelectedParticipant(participant)}>
+                        <TableRow key={participant.id} onClick={() => setSelectedParticipant(participant)}>
                             <TableCell>{participant.name}</TableCell>
                             <TableCell>{participant.email}</TableCell>
                             <TableCell>{participant.coursesDetails.map(c => c.title).join(', ')}</TableCell>
@@ -102,6 +103,7 @@ function Participants(): React.ReactElement {
                                     sx={{minWidth: 100}}
                                 />
                             </TableCell>
+                            <TableCell>{new Date(participant.enrollmentDate).toLocaleDateString('de-DE')}</TableCell>
                             <TableCell>
                                 <Link to={`/participants/${participant.id}`} className="btn-detail">Bearbeiten</Link>
                             </TableCell>
