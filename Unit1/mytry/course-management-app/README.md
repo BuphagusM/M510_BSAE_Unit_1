@@ -251,12 +251,13 @@ Diese App ist **bewusst nicht vollständig**. Die folgenden Features sind NICHT 
 ### Meine Erwartungen an mich 
 MVP:
 - 📚 SQLLight angewendet ✅
-- 📚 Kurse erfassen
-- 📚 Kurse bearbeiten
-- 📚 Teilnehmer hinzufügen
-- 📚 Teilnehmer bearbeiten
+- 📚 Kurse erfassen ✅
+- 📚 Kurse bearbeiten ✅
+- 📚 Teilnehmer hinzufügen ✅
+- 📚 Teilnehmer bearbeiten ✅
 - 📚 Erweiterte Fehlerbehandlung und Nutzerfeedback (z.B. Toasts) hinzufügen
-- 📚 PopUp variante aus den Lösungen mit Teilnehmenden Zahl selber probieren zu implementieren
+- 📚 PopUp variante aus den Lösungen mit Teilnehmenden Zahl selber probieren zu implementieren ✅
+- 📚 API Objekt prüfen. Wenn Entity erwartet wird im Backend, darf aus dem Frontend nur ein DTO kommen wenn das Backend damit klar kommt 
 
 MPV+:
 - 📚 User Registrierung und Login-System implementieren
