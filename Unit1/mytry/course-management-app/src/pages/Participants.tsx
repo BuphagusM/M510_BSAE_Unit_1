@@ -2,9 +2,11 @@ import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useParticipants} from '../hooks/useParticipants'
 import {
+    Box,
     Button,
     Chip,
     MenuItem,
+    Modal,
     Select,
     Stack,
     Table,
@@ -16,11 +18,14 @@ import {
     Tooltip,
     Typography
 } from '@mui/material'
+import {ParticipantDTO} from '../model/participant-dto'
+import ParticipantDetailView from '../components/ParticipantDetailView'
 
 function Participants(): React.ReactElement {
     const [searchColumn, setSearchColumn] = useState<'all' | 'name' | 'email' | 'course'>('all')
     const [searchQuery, setSearchQuery] = useState('')
     const {participants} = useParticipants()
+    const [selectedParticipant, setSelectedParticipant] = useState<ParticipantDTO | null>(null)
 
 
     const filteredParticipants = participants.filter(p =>
@@ -85,7 +90,7 @@ function Participants(): React.ReactElement {
                 </TableHead>
                 <TableBody>
                     {filteredParticipants.map(participant => (
-                        <TableRow key={participant.id}>
+                        <TableRow key={participant.id} onClick={()=> setSelectedParticipant(participant)}>
                             <TableCell>{participant.name}</TableCell>
                             <TableCell>{participant.email}</TableCell>
                             <TableCell>{participant.coursesDetails.map(c => c.title).join(', ')}</TableCell>
@@ -98,7 +103,7 @@ function Participants(): React.ReactElement {
                                 />
                             </TableCell>
                             <TableCell>
-                                <Link to={`/participants/${participant.id}`} className="btn-detail">Details</Link>
+                                <Link to={`/participants/${participant.id}`} className="btn-detail">Bearbeiten</Link>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -111,6 +116,22 @@ function Participants(): React.ReactElement {
                     )}
                 </TableBody>
             </Table>
+            <Modal open={!!selectedParticipant} onClose={() => setSelectedParticipant(null)}>
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 560, maxHeight: '80vh', overflowY: 'auto',
+                    bgcolor: 'background.paper', borderRadius: 2,
+                    boxShadow: 24, p: 4,
+                }}>
+                    {selectedParticipant && (
+                        <ParticipantDetailView
+                            participant={selectedParticipant}
+                            onClose={() => setSelectedParticipant(null)}
+                        />
+                    )}
+                </Box>
+            </Modal>
         </Stack>
     )
 }
