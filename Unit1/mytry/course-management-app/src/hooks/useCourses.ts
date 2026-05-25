@@ -1,7 +1,12 @@
 import {useEffect, useState} from 'react';
 import {CourseDTO} from '../model/course-dto.ts';
-import {fetchCourses, fetchRemoveCourseById, fetchUpdateCourseById, fetchCreateCourse} from '../services/courses-data-http-request';
-import { CourseEntity } from '../model/course-entity.ts';
+import {
+    fetchCourses,
+    fetchCreateCourse,
+    fetchRemoveCourseById,
+    fetchUpdateCourseById
+} from '../services/courses-data-http-request';
+import {CourseEntity} from '../model/course-entity.ts';
 
 export const useCourses = () => {
     const [courses, setCourses] = useState<CourseDTO[]>([]);

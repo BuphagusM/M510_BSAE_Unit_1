@@ -1,7 +1,7 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { useCourses } from '../hooks/useCourses'
-import { useParticipants } from '../hooks/useParticipants'
+import {Link, useParams} from 'react-router-dom'
+import {useCourses} from '../hooks/useCourses'
+import {useParticipants} from '../hooks/useParticipants'
 
 function ParticipantDetail(): React.ReactElement {
     const { id } = useParams<{ id: string }>()

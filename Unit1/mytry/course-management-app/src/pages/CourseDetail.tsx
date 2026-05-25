@@ -1,24 +1,23 @@
 import React from 'react'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useLocation, useParams} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
 import {useCourseDetailForm} from '../hooks/useCourseDetailForm'
 import {
-    TextField,
-    Select,
-    MenuItem,
+    Button,
+    Chip,
     FormControl,
     InputLabel,
-    Button,
+    MenuItem,
+    Select,
     Stack,
-    Typography,
     Table,
+    TableBody,
+    TableCell,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
-    Chip
+    TextField,
+    Typography
 } from '@mui/material'
-import {useLocation} from "react-router-dom";
 import {CourseDTO} from '../model/course-dto'
 
 function CourseDetail(): React.ReactElement {
@@ -36,7 +35,14 @@ function CourseDetail(): React.ReactElement {
         participantsList: []
     }
     const course = location ? newCourseTemplate : courses.find(c => c.id === Number(id))
-    const {formData, handleChange, handleSelectChange, handleSubmit, handleDelete, handleCreate} = useCourseDetailForm(course)
+    const {
+        formData,
+        handleChange,
+        handleSelectChange,
+        handleSubmit,
+        handleDelete,
+        handleCreate
+    } = useCourseDetailForm(course)
 
     if (!course && !!id) {
         return (
@@ -109,7 +115,7 @@ function CourseDetail(): React.ReactElement {
                     />
                     <TextField
                         label="Anzahl Teilnehmende"
-                        value={course.participantsList.length}
+                        value={course ? course.participantsList.length : 0}
                         fullWidth
                         slotProps={{input: {readOnly: true}}}
                     />

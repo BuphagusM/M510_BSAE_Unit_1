@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useParticipants } from '../hooks/useParticipants'
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
+import {useParticipants} from '../hooks/useParticipants'
 
 function Participants(): React.ReactElement {
     const [searchColumn, setSearchColumn] = useState<'all' | 'name' | 'email' | 'course'>('all')

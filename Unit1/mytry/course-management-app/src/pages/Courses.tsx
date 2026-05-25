@@ -2,18 +2,19 @@ import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
 import {
+    Button,
+    Chip,
+    MenuItem,
+    Modal,
+    Select,
+    Stack,
     Table,
+    TableBody,
+    TableCell,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
-    Modal,
-    Chip,
-    Button,
-    Select,
-    MenuItem,
-    InputLabel,
-    TextField
+    TextField,
+    Typography
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import CourseDetailView from '../components/CourseDetailView'
@@ -33,10 +34,12 @@ function Courses(): React.ReactElement {
     )
 
     return (
-        <div>
-            <h1 className="page-title">Kurse</h1>
-            <div className="filter-container">
-                <InputLabel id="status-label">Status</InputLabel>
+        <Stack>
+            <Typography variant='h3'>Kurse</Typography>
+            <Stack direction="row"
+                   sx={{
+                       mb: 2
+                   }}>
                 <Select
                     value={statusFilter}
                     onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
@@ -46,24 +49,24 @@ function Courses(): React.ReactElement {
                     <MenuItem value="all">Alle</MenuItem>
                     <MenuItem value="active">Active</MenuItem>
                     <MenuItem value="inactive">Inactive</MenuItem>
-
                 </Select>
                 <TextField
                     label="Kurs suchen"
                     name="search"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    sx={{width:'60%', ml: 2}}
+                    sx={{width: '60%', ml: 2}}
                 />
                 <Button
                     component={Link}
                     to={`/courses/create`}
                     variant="outlined"
-                    size="small"
+                    size="large"
+                    sx={{ml: 2}}
                 >
                     Kurs Hinzufügen
                 </Button>
-            </div>
+            </Stack>
 
             <Table>
                 <TableHead>
@@ -123,7 +126,7 @@ function Courses(): React.ReactElement {
                     )}
                 </Box>
             </Modal>
-        </div>
+        </Stack>
     )
 }
 
