@@ -16,21 +16,23 @@ export const useCourses = () => {
             .catch(err => console.error(err));
     }, []);
 
-    const deleteCourse = async (courseId: number): Promise<void> => {
-        await fetchRemoveCourseById(courseId)
+    const deleteCourse = async (courseId: number): Promise<string> => {
+        const message = await fetchRemoveCourseById(courseId)
         setCourses(prev => prev.filter(c => c.id !== courseId));
+        return message;
     };
 
-    const updateCourse = async (courseDTO: CourseDTO): Promise<void> => {
-        await fetchUpdateCourseById(courseDTO.id, courseDTO)
+    const updateCourse = async (courseDTO: CourseDTO): Promise<string> => {
+        const message = await fetchUpdateCourseById(courseDTO.id, courseDTO)
         setCourses(prev => prev.map(c => c.id === courseDTO.id ? courseDTO : c))
+        return message;
     };
 
-    const createCourse = async (courseDTO: CourseDTO): Promise<void> => {
-        await fetchCreateCourse(courseDTO)
-        fetchCourses()
-            .then(data => setCourses(data))
-            .catch(err => console.error(err));
+    const createCourse = async (courseDTO: CourseDTO): Promise<string> => {
+        const message = await fetchCreateCourse(courseDTO)
+        const data = await fetchCourses()
+        setCourses(data)
+        return message;
     };
 
     return {courses, deleteCourse, updateCourse, createCourse};

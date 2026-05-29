@@ -1,6 +1,16 @@
 // participants-data-http-request.ts
 import {ParticipantDTO} from '../model/participant-dto.ts';
 
+const parseResponseMessage = async (response: Response): Promise<string> => {
+    const text = await response.text();
+    try {
+        const parsed = JSON.parse(text);
+        return parsed.message ?? text;
+    } catch {
+        return text;
+    }
+};
+
 export const fetchParticipants = async (): Promise<ParticipantDTO[]> => {
     const response = await fetch('http://localhost:3001/api/v1/participants');
     if (!response.ok) {
@@ -16,7 +26,7 @@ export const fetchRemoveParticipantById = async (id: number): Promise<string> =>
     if (!response.ok) {
         throw new Error(`Fehler beim Löschen des Teilnehmers: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 };
 
 export const fetchUpdateParticipantById = async (id: number, updatedParticipant: ParticipantDTO): Promise<string> => {
@@ -28,7 +38,7 @@ export const fetchUpdateParticipantById = async (id: number, updatedParticipant:
     if (!response.ok) {
         throw new Error(`Fehler beim Aktualisieren des Teilnehmers: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 };
 
 export const fetchCreateParticipant = async (participantDTO: ParticipantDTO): Promise<string> => {
@@ -40,5 +50,5 @@ export const fetchCreateParticipant = async (participantDTO: ParticipantDTO): Pr
     if (!response.ok) {
         throw new Error(`Fehler beim Erstellen des Teilnehmers: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 };

@@ -3,12 +3,14 @@ import {Link, useLocation, useParams} from 'react-router-dom'
 import {useCourses} from '../hooks/useCourses'
 import {useCourseDetailForm} from '../hooks/useCourseDetailForm'
 import {
+    Alert,
     Button,
     Chip,
     FormControl,
     InputLabel,
     MenuItem,
     Select,
+    Snackbar,
     Stack,
     Table,
     TableBody,
@@ -18,12 +20,27 @@ import {
     TextField,
     Typography
 } from '@mui/material'
+import CheckIcon from '@mui/icons-material/Check'
 import {CourseDTO} from '../model/course-dto'
 
 function CourseDetail(): React.ReactElement {
     const {id} = useParams<{ id: string }>()
     const location = useLocation().pathname.endsWith('/create');
     const {courses} = useCourses()
+    const [notification, setNotification] = React.useState<{
+        message: string
+        severity: 'success' | 'error' | 'info' | 'warning'
+    } | null>(null)
+
+    const showNotification = (message: string, severity: 'success' | 'error' | 'info' | 'warning' = 'success') => {
+        setNotification({message, severity})
+    }
+
+    const closeNotification = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') return
+        setNotification(null)
+    }
+
     const newCourseTemplate: CourseDTO = {
         id: 0,
         title: 'Neuen Kurs anlegen',
@@ -42,7 +59,7 @@ function CourseDetail(): React.ReactElement {
         handleSubmit,
         handleDelete,
         handleCreate
-    } = useCourseDetailForm(course)
+    } = useCourseDetailForm(course, showNotification)
 
     if (!course && !!id) {
         return (
@@ -59,6 +76,22 @@ function CourseDetail(): React.ReactElement {
         <Stack>
             <Link to="/courses" className="btn-back">← Zurück zu Kursen</Link>
             <h1 className="page-title">{formData.title}</h1>
+
+            <Snackbar
+                open={!!notification}
+                autoHideDuration={4000}
+                onClose={closeNotification}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+            >
+                <Alert
+                    onClose={closeNotification}
+                    severity={notification?.severity ?? 'success'}
+                    icon={notification?.severity === 'success' ? <CheckIcon fontSize="inherit" /> : undefined}
+                    sx={{width: '100%'}}
+                >
+                    {notification?.message}
+                </Alert>
+            </Snackbar>
 
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} sx={{mt: 2, mb: 3}}>

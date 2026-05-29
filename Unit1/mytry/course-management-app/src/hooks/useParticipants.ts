@@ -16,22 +16,23 @@ export const useParticipants = () => {
             .catch(err => console.error(err));
     }, []);
 
-    const deleteParticipant = async (id: number): Promise<void> => {
-        await fetchRemoveParticipantById(id);
+    const deleteParticipant = async (id: number): Promise<string> => {
+        const message = await fetchRemoveParticipantById(id);
         setParticipants(prev => prev.filter(p => p.id !== id));
-
+        return message;
     };
 
-    const updateParticipant = async (updatedParticipant: ParticipantDTO): Promise<void> => {
-        await fetchUpdateParticipantById(updatedParticipant.id, updatedParticipant);
+    const updateParticipant = async (updatedParticipant: ParticipantDTO): Promise<string> => {
+        const message = await fetchUpdateParticipantById(updatedParticipant.id, updatedParticipant);
         setParticipants(prev => prev.map(p => p.id === updatedParticipant.id ? updatedParticipant : p));
+        return message;
     };
 
-    const createParticipant = async (participantDTO: ParticipantDTO): Promise<void> => {
-        await fetchCreateParticipant(participantDTO);
-        fetchParticipants()
-            .then(data => setParticipants(data))
-            .catch(err => console.error(err));
+    const createParticipant = async (participantDTO: ParticipantDTO): Promise<string> => {
+        const message = await fetchCreateParticipant(participantDTO);
+        const data = await fetchParticipants();
+        setParticipants(data);
+        return message;
     };
 
 

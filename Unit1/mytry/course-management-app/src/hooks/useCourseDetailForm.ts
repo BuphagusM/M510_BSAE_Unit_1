@@ -4,7 +4,14 @@ import {SelectChangeEvent} from '@mui/material'
 import {CourseDTO} from '../model/course-dto'
 import {useCourses} from './useCourses'
 
-export const useCourseDetailForm = (course: CourseDTO | undefined) => {
+type NotificationSeverity = 'success' | 'error' | 'info' | 'warning'
+
+type NotificationCallback = (message: string, severity?: NotificationSeverity) => void
+
+export const useCourseDetailForm = (
+    course: CourseDTO | undefined,
+    onNotification?: NotificationCallback,
+) => {
     const navigate = useNavigate()
     const {deleteCourse, updateCourse, createCourse} = useCourses()
 
@@ -43,26 +50,44 @@ export const useCourseDetailForm = (course: CourseDTO | undefined) => {
         setFormData(prev => ({...prev, [e.target.name]: e.target.value}))
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!course) return
-        updateCourse({...course, ...formData, capacity: Number(formData.capacity)})
-            .then(() => navigate('/courses'))
-            .catch(err => console.error(err))
+
+        try {
+            const message = await updateCourse({...course, ...formData, capacity: Number(formData.capacity)})
+            onNotification?.(message, 'success')
+            setTimeout(() => navigate('/courses'), 1000)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error)
+            onNotification?.(message, 'error')
+        }
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!course) return
-        deleteCourse(course.id)
-            .then(() => navigate('/courses'))
-            .catch(err => console.error(err))
+
+        try {
+            const message = await deleteCourse(course.id)
+            onNotification?.(message, 'success')
+            setTimeout(() => navigate('/courses'), 1000)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error)
+            onNotification?.(message, 'error')
+        }
     }
 
-    const handleCreate = (e: React.FormEvent) => {
+    const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault()
-        createCourse(formData)
-            .then(() => navigate('/courses'))
-            .catch(err => console.error(err))
+
+        try {
+            const message = await createCourse(formData)
+            onNotification?.(message, 'success')
+            setTimeout(() => navigate('/courses'), 1000)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error)
+            onNotification?.(message, 'error')
+        }
     }
 
     return {formData, handleChange, handleSelectChange, handleSubmit, handleDelete, handleCreate}

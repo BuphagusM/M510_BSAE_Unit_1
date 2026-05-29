@@ -10,6 +10,16 @@ export const fetchCourses = async (): Promise<CourseDTO[]> => {
     return response.json() as Promise<CourseDTO[]>;
 };
 
+const parseResponseMessage = async (response: Response): Promise<string> => {
+    const text = await response.text();
+    try {
+        const parsed = JSON.parse(text);
+        return parsed.message ?? text;
+    } catch {
+        return text;
+    }
+};
+
 export const fetchUpdateCourseById = async (courseId: number, courseDTO: CourseDTO): Promise<string> => {
     const response = await fetch(`http://localhost:3001/api/v1/courses/${courseId}`, {
         method: 'PUT',
@@ -19,7 +29,7 @@ export const fetchUpdateCourseById = async (courseId: number, courseDTO: CourseD
     if (!response.ok) {
         throw new Error(`Fehler beim Aktualisieren des Kurses: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 }
 
 export const fetchRemoveCourseById = async (courseId: number): Promise<string> => {
@@ -29,7 +39,7 @@ export const fetchRemoveCourseById = async (courseId: number): Promise<string> =
     if (!response.ok) {
         throw new Error(`Fehler beim Löschen des Kurses: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 }
 
 export const fetchCreateCourse = async (courseDTO: CourseDTO): Promise<string> => {
@@ -41,5 +51,5 @@ export const fetchCreateCourse = async (courseDTO: CourseDTO): Promise<string> =
     if (!response.ok) {
         throw new Error(`Fehler beim Erstellen des Kurses: ${response.status}`);
     }
-    return response.text();
+    return parseResponseMessage(response);
 }

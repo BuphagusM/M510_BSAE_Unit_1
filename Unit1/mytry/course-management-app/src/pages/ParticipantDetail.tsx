@@ -3,12 +3,27 @@ import {Link, useLocation, useParams} from 'react-router-dom'
 import {useParticipants} from '../hooks/useParticipants'
 import {ParticipantDTO} from '../model/participant-dto'
 import {useParticipantDetailForm} from '../hooks/useParticipantDetailForm'
-import {Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography} from '@mui/material'
+import {Alert, Button, FormControl, InputLabel, MenuItem, Select, Snackbar, Stack, TextField, Typography} from '@mui/material'
+import CheckIcon from '@mui/icons-material/Check'
 
 function ParticipantDetail(): React.ReactElement {
     const {id} = useParams<{ id: string }>()
     const location = useLocation().pathname.endsWith('/create');
     const {participants} = useParticipants()
+    const [notification, setNotification] = React.useState<{
+        message: string
+        severity: 'success' | 'error' | 'info' | 'warning'
+    } | null>(null)
+
+    const showNotification = (message: string, severity: 'success' | 'error' | 'info' | 'warning' = 'success') => {
+        setNotification({message, severity})
+    }
+
+    const closeNotification = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') return
+        setNotification(null)
+    }
+
     const newParticipant: ParticipantDTO = {
         id: 0,
         name: '',
@@ -26,7 +41,7 @@ function ParticipantDetail(): React.ReactElement {
         handleSubmit,
         handleDelete,
         handleCreate
-    } = useParticipantDetailForm(participant)
+    } = useParticipantDetailForm(participant, showNotification)
 
     if (!participant && !!id) {
         return (
@@ -44,6 +59,22 @@ function ParticipantDetail(): React.ReactElement {
             <Link to="/participants" className="btn-back">← Zurück zu Teilnehmenden</Link>
             <Typography variant="h4"
                         gutterBottom>{location ? 'Neuen Teilnehmer erstellen' : participant?.name}</Typography>
+
+            <Snackbar
+                open={!!notification}
+                autoHideDuration={4000}
+                onClose={closeNotification}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+            >
+                <Alert
+                    onClose={closeNotification}
+                    severity={notification?.severity ?? 'success'}
+                    icon={notification?.severity === 'success' ? <CheckIcon fontSize="inherit" /> : undefined}
+                    sx={{width: '100%'}}
+                >
+                    {notification?.message}
+                </Alert>
+            </Snackbar>
 
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} sx={{mt: 2, mb: 3}}>
