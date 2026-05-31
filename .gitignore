@@ -3,6 +3,9 @@
 # Persönliche Lernnotizen
 **/LEARNING.md
 
+# Lighthouse-Berichte
+**/.lighthouseci/*
+
 # Dependencies
 **/node_modules/
 

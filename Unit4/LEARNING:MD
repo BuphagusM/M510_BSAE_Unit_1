@@ -1,0 +1,71 @@
+# https://www.accessibility-developer-guide.com/
+# https://www.ict-berufsbildung.ch/weiterbildung/fachausweis/ict-application-development-specialist
+
+Doch, beides geht auch **lokal**!
+
+## eslint-plugin-jsx-a11y – lokal
+
+Das ist sogar primär ein lokales Tool:
+
+```bash
+npm install --save-dev eslint eslint-plugin-jsx-a11y
+```
+
+In `.eslintrc` (Manuel erstellen):
+```json
+{
+  "plugins": ["jsx-a11y"],
+  "extends": ["plugin:jsx-a11y/recommended"]
+}
+```
+
+Dann einfach:
+```bash
+npx eslint src/
+npx eslint src --ext .ts,.tsx
+```
+
+Läuft komplett lokal, kein CI nötig. Im Editor (VS Code + ESLint Extension) siehst du Fehler sogar **live beim Tippen**.
+
+---
+
+## Lighthouse – lokal
+
+Lighthouse gibt es auch als CLI:
+
+```bash
+npm install -g lighthouse
+lighthouse http://localhost:3000 --view
+```
+
+Öffnet direkt einen HTML-Report im Browser. Oder als JSON:
+```bash
+lighthouse http://localhost:3000 --output json --output-path report.json
+```
+
+„Lighthouse CI" ist nur der Name für die CI-Variante – die gleiche Engine läuft aber auch lokal:
+```bash
+npm install -g @lhci/cli
+# Testen via 
+npm run dev           # Terminal 1
+lhci collect --url=http://localhost:5173   # Terminal 2
+# oder mit autorun verlangt aber lightouserc.json
+lhci autorun
+# Resultate in 
+.lighthouseci/lhr-1780127561374.html ← Diese Datei im Browser öffnen (visueller Report)
+.lighthouseci/lhr-1780127561374.json ← Detaillierte Daten im JSON-Format
+```
+
+---
+
+## Zusammenfassung
+
+| Tool | Lokal | CI |
+|---|---|---|
+| eslint-plugin-jsx-a11y | ✅ (primär lokal) | ✅ |
+| Lighthouse CLI | ✅ | ✅ |
+| Lighthouse CI (lhci) | ✅ | ✅ |
+| Pa11y | ✅ | ✅ |
+| axe-core + Playwright | ✅ | ✅ |
+
+Alle diese Tools sind **lokal-first** – CI ist nur ein optionaler nächster Schritt.
