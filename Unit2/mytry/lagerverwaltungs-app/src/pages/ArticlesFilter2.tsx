@@ -4,7 +4,7 @@ import { articles } from '../data/mockData'
 import {Stack, Typography,TextField, Tooltip, Select, MenuItem, Table, TableHead, TableRow, TableCell, Button} from "@mui/material";
 
 // Artikelseite - zeigt alle Artikel in einer Tabelle an
-function Articles(): React.ReactElement {
+function ArticlesFilter2(): React.ReactElement {
   // TODO: Tabelle mit allen Artikeln ausgeben
   const articleList = articles
 
@@ -38,9 +38,9 @@ function Articles(): React.ReactElement {
     [articleList, filterValues]
   )
 
-  const categories = Array.from(new Set(filteredArticles.map((article) => article.category)))
-  const statuses = Array.from(new Set(filteredArticles.map((article) => article.status)))
-  const locations = Array.from(new Set(filteredArticles.map((article) => article.location)))
+  const categories = Array.from(new Set(articleList.map((article) => article.category)))
+  const statuses = Array.from(new Set(articleList.map((article) => article.status)))
+  const locations = Array.from(new Set(articleList.map((article) => article.location)))
 
   const filters = [
     { id: 'category', label: 'Kategorie', values: categories, allLabel: 'Alle Kategorien' },
@@ -57,7 +57,7 @@ function Articles(): React.ReactElement {
   return (
     <Stack className="page-container" spacing={2}>
       <Typography className="page-title" variant="h3">
-        Artikel
+        Artikel Filter 2
       </Typography>
       {articleList.length > 0 ? (
       <>
@@ -114,7 +114,8 @@ function Articles(): React.ReactElement {
           </TableRow>
         </TableHead>
         <tbody>
-          {filteredArticles.map((article) => (
+          {filteredArticles.length > 0? (
+            filteredArticles.map((article) => (
             <TableRow key={article.articleNumber}>
               <TableCell>{article.name}</TableCell>
               <TableCell>{article.articleNumber}</TableCell>
@@ -124,7 +125,14 @@ function Articles(): React.ReactElement {
               <TableCell>{article.minStock}</TableCell>
               <TableCell>{article.status}</TableCell>
             </TableRow>
-          ))}
+          ))):
+          (
+            <TableRow>
+              <TableCell colSpan={8} align="center" style={{ color: '#94a3b8' }}>
+                Keine Artikel gefunden.
+              </TableCell>
+            </TableRow>
+          )}
         </tbody>
       </Table>
       </>
@@ -135,4 +143,4 @@ function Articles(): React.ReactElement {
   )
 }
 
-export default Articles
+export default ArticlesFilter2
