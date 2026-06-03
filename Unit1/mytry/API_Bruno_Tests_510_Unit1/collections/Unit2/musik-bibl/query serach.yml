@@ -5,13 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:4000/api/songs?genre=Rock&favorite=false
+  url: http://localhost:4000/api/songs?search=queen
   params:
-    - name: genre
-      value: Rock
-      type: query
-    - name: favorite
-      value: "false"
+    - name: search
+      value: queen
       type: query
   auth: inherit
 

@@ -38,3 +38,9 @@ export async function toggleFavorite(id: number): Promise<Song> {
 // TODO: Suchfunktion implementieren
 // Ergänze eine Funktion searchSongs(query: string): Promise<Song[]>
 // Sie soll GET /api/songs?search=<query> aufrufen und das Ergebnis zurückgeben.
+
+export async function searchSongs(query: string): Promise<Song[]> {
+  const res = await fetch(`${BASE}/songs?search=${encodeURIComponent(query)}`)
+  if (!res.ok) throw new Error('Fehler bei der Suche nach Songs')
+  return res.json()
+}
