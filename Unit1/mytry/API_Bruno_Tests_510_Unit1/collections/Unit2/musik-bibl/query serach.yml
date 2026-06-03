@@ -1,0 +1,38 @@
+info:
+  name: query serach
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: http://localhost:4000/api/songs?genre=Rock&favorite=false
+  params:
+    - name: genre
+      value: Rock
+      type: query
+    - name: favorite
+      value: "false"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  ?genre=hiphop          # filtert nach Genre (exakter Match)
+  ?favorite=true         # nur Favoriten
+  ?genre=hiphop&favorite=true   # kombiniert
+  ?search= # artis oder titel kann gesucht werden.
+
+
+  Expamples:
+  # Einzelne Parameter 
+  http://localhost:4000/api/songs?search=eminem
+  http://localhost:4000/api/songs?genre=Rock
+  # Mehrere querry Parameter
+  http://localhost:4000/api/songs?genre=Rock&favorite=false
+  # Maximale Kombintation:
+  http://localhost:4000/api/songs?genre=Rock&favorite=true&search=queen 

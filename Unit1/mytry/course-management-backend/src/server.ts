@@ -1,11 +1,14 @@
 // server.ts
 import express from 'express';
 import cors from 'cors';
-import {getDashboardDetailsInfo} from './controllers/dashboards-controller';
 import * as coursesController from './controllers/courses-controller';
 import * as participantsController from './controllers/participants-controller';
+import dashboardController from './controllers/dashboards-controller';
 
 const app = express();
+const REQURL = "http://localhost:"
+const PORT = 3001
+const apiVersion = '/api/v1'
 
 // Todo kommt später zum Einsatz für Dev API's
 const apiKeyMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -17,9 +20,9 @@ const apiKeyMiddleware = (req: express.Request, res: express.Response, next: exp
 };
 
 
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({origin: REQURL + PORT}));
 app.use(express.json());
-const apiVersion = '/api/v1'
+
 
 /* 
 * UI-Endpunkte
@@ -32,7 +35,7 @@ const apiVersion = '/api/v1'
  *  app.get(apiVersion + '/dashboard/details', apiKeyMiddleware, getDashboardDetailsInfo);
  */
 // ungeschützt da für UI ClientKey nicht geeignet ist:
-app.get(apiVersion + '/dashboard/details', getDashboardDetailsInfo);
+app.use(apiVersion, dashboardController);
 
 // Kurs-Endpunkte
 app.get(apiVersion + '/courses', coursesController.getAllCoursesDTOHandler);
@@ -47,6 +50,6 @@ app.put(apiVersion + '/participants/:participantId', participantsController.upda
 app.post(apiVersion + '/participants/create', participantsController.createParticipant)
 
 
-app.listen(3001, () => {
-    console.log('Server läuft auf http://localhost:3001');
+app.listen(PORT, () => {
+    console.log(`Server läuft auf ${REQURL}${PORT}`);
 });

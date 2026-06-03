@@ -1,6 +1,6 @@
 const express = require('express')
-const router  = express.Router()
-const { readData, writeData } = require('../database')
+const router = express.Router()
+const {readData, writeData} = require('../database')
 
 // GET /api/songs – alle Songs abrufen
 // Optional: ?genre=...  filtert nach Genre
@@ -10,79 +10,89 @@ const { readData, writeData } = require('../database')
 // Erweitere diese Route um den optionalen Query-Parameter ?search=...
 // Der Parameter soll Titel und Interpret (case-insensitive) filtern.
 router.get('/', (req, res) => {
-  const { genre, favorite } = req.query
-  let { songs } = readData()
+    const {genre, favorite, search} = req.query
+    let {songs} = readData()
 
-  // TODO: Suche nach Titel/Interpret hier implementieren
-  // Hinweis: req.query.search enthält den Suchbegriff (falls vorhanden)
+    // TODO: Suche nach Titel/Interpret hier implementieren
+    // Hinweis: req.query.search enthält den Suchbegriff (falls vorhanden)
+    if (search) {
+        const searchLower = search.toLowerCase()
+        songs = songs.filter(song =>
+            song.title.toLowerCase().includes(searchLower) ||
+            song.artist.toLowerCase().includes(searchLower)
+        )
+    }
 
-  if (genre) {
-    songs = songs.filter(song => song.genre === genre)
-  }
+    if (genre) {
+        songs = songs.filter(song => song.genre === genre)
+    }
 
-  if (favorite === 'true') {
-    songs = songs.filter(song => song.favorite === 1)
-  }
+    if (favorite === 'true') {
+        songs = songs.filter(song => song.favorite === 1)
+    }
+    else if (favorite === 'false') {
+        songs = songs.filter(song => song.favorite === 0)
+    }
 
-  // Alphabetisch nach Interpret, dann nach Titel sortieren
-  songs.sort((a, b) => a.artist.localeCompare(b.artist) || a.title.localeCompare(b.title))
+    // Alphabetisch nach Interpret, dann nach Titel sortieren
+    songs.sort((a, b) => a.artist.localeCompare(b.artist) || a.title.localeCompare(b.title))
 
-  res.json(songs)
+    res.json(songs)
 })
 
 // POST /api/songs – neuen Song anlegen
 router.post('/', (req, res) => {
-  const { title, artist, album, genre, year, duration } = req.body
+    const {title, artist, album, genre, year, duration} = req.body
 
-  if (!title || !artist) {
-    return res.status(400).json({ error: 'Titel und Interpret sind Pflichtfelder.' })
-  }
+    if (!title || !artist) {
+        return res.status(400).json({error: 'Titel und Interpret sind Pflichtfelder.'})
+    }
 
-  const data   = readData()
-  const newSong = {
-    id:       data.nextId++,
-    title,
-    artist,
-    album:    album    || null,
-    genre:    genre    || null,
-    year:     year     ? Number(year) : null,
-    duration: duration || null,
-    favorite: 0,
-  }
+    const data = readData()
+    const newSong = {
+        id: data.nextId++,
+        title,
+        artist,
+        album: album || null,
+        genre: genre || null,
+        year: year ? Number(year) : null,
+        duration: duration || null,
+        favorite: 0,
+    }
 
-  data.songs.push(newSong)
-  writeData(data)
-  res.status(201).json(newSong)
+    data.songs.push(newSong)
+    writeData(data)
+    res.status(201).json(newSong)
 })
 
 // DELETE /api/songs/:id – Song löschen
 router.delete('/:id', (req, res) => {
-  const id   = Number(req.params.id)
-  const data = readData()
-  const idx  = data.songs.findIndex(s => s.id === id)
+    const id = Number(req.params.id)
+    const data = readData()
+    const idx = data.songs.findIndex(s => s.id === id)
 
-  if (idx === -1) {
-    return res.status(404).json({ error: 'Song nicht gefunden.' })
-  }
+    if (idx === -1) {
+        return res.status(404).json({error: 'Song nicht gefunden.'})
+    }
 
-  data.songs.splice(idx, 1)
-  writeData(data)
-  res.status(204).send()
+    data.songs.splice(idx, 1)
+    writeData(data)
+    res.status(204).send()
 })
 
 // PATCH /api/songs/:id/favorite – Favorit-Status umschalten (0 → 1 oder 1 → 0)
 router.patch('/:id/favorite', (req, res) => {
-  const id   = Number(req.params.id)
-  const data = readData()
-  const song = data.songs.find(s => s.id === id)
+    const id = Number(req.params.id)
+    const data = readData()
+    const song = data.songs.find(s => s.id === id)
 
-  if (!song) {
-    return res.status(404).json({ error: 'Song nicht gefunden.' })
-  }
+    if (!song) {
+        return res.status(404).json({error: 'Song nicht gefunden.'})
+    }
 
-  song.favorite = song.favorite === 0 ? 1 : 0
-  writeData(data)
-  res.json(song)
+    song.favorite = song.favorite === 0 ? 1 : 0
+    writeData(data)
+    res.json(song)
 })
 
 module.exports = router

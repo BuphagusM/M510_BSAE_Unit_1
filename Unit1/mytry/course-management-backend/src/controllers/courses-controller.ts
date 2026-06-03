@@ -2,7 +2,6 @@
 import express from 'express';
 import {getCourseById, getcreateCourse, getRemoveCourseById, getUpdateCourseById} from '../services/course-service';
 import {getAllCoursesDto} from '../services/dto-service';
-import {CourseEntity} from "../models/course-entity";
 import {CourseDTO} from "../models/course-dto";
 
 // Kurs-Handler

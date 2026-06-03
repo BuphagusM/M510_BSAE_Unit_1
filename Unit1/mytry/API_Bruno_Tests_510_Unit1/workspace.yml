@@ -6,6 +6,8 @@ info:
 collections:
   - name: "Unit1"
     path: "collections/Unit1"
+  - name: "Unit2"
+    path: "collections/Unit2"
 
 specs:
 

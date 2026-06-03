@@ -1,13 +1,14 @@
-// participants-controller.ts
-import express from 'express';
-import {getAllCourses, getCourseById, getCourseCountByStatus} from '../services/course-service';
-import {getAllParticipants, getParticipantById, getParticipantCountByStatus} from '../services/participant-service';
-import {getAllCoursesDto, getAllParticipantsDto} from '../services/dto-service';
+// dashboards-controller.ts
+import express, { Request, Response } from 'express';
+import {getAllCourses, getCourseCountByStatus} from '../services/course-service';
+import {getAllParticipants, getParticipantCountByStatus} from '../services/participant-service';
 import {DashboarDetailsInfo} from "../models/dashboar-details-info";
 
-// Dashboard-Handler
+const router = express.Router();
 
-export const getDashboardDetailsInfo = (req: express.Request, res: express.Response) => {
+
+// Dashboard-Handler
+router.get('/dashboard/details', (req: Request, res: Response) => {
     try {
         const dashboardDetailsInfo: DashboarDetailsInfo = {
             totalActiveCourses: getCourseCountByStatus('active'),
@@ -22,4 +23,6 @@ export const getDashboardDetailsInfo = (req: express.Request, res: express.Respo
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
+
+export default router;
