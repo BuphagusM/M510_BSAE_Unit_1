@@ -1,5 +1,5 @@
 // participants-controller.ts
-import express from 'express';
+import express, {Request, Response} from 'express';
 import {getAllParticipantsDto} from '../services/dto-service';
 import {ParticipantEntity} from "../models/participant-entity";
 import {
@@ -10,9 +10,11 @@ import {
 } from "../services/participant-service";
 import {ParticipantDTO} from "../models/participant-dto";
 
+const router = express.Router();
+
 // Teilnehmer-Handler
 
-export const getAllParticipantsDTOHandler = (req: express.Request, res: express.Response) => {
+router.get('/', (req: Request, res: Response) => {
     try {
         const participantsDTO = getAllParticipantsDto();
         console.info('Teilnehmerdaten abgerufen: ', participantsDTO.length)
@@ -22,9 +24,9 @@ export const getAllParticipantsDTOHandler = (req: express.Request, res: express.
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-};
+});
 
-export const removeParticipantById = (req: express.Request, res: express.Response) => {
+router.delete('/:participantId', (req: Request, res: Response) => {
     try {
         const participantId = req.params.participantId;
         const participant = getParticipantById(Number(participantId)) as ParticipantEntity;
@@ -41,12 +43,12 @@ export const removeParticipantById = (req: express.Request, res: express.Respons
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
 
-export const updateParticipantById = (req: express.Request, res: express.Response) => {
+router.put('/:participantId', (req: Request, res: Response) => {
     try {
         const participantId = req.params.participantId;
-        const participantsDto : ParticipantDTO = req.body;
+        const participantsDto: ParticipantDTO = req.body;
         const participant = getParticipantById(Number(participantId)) as ParticipantEntity;
         if (!participant) {
             const errMsg = `Teilnehmer ${participantsDto.name} mit ID ${participantId} nicht gefunden`;
@@ -63,11 +65,12 @@ export const updateParticipantById = (req: express.Request, res: express.Respons
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
 
-export const createParticipant = (req: express.Request, res: express.Response) => {
+router.post('/create', (req: Request, res: Response) => {
     try {
         const participantDTO: ParticipantDTO = req.body;
+        console.log("das ist der BOdy", req.body)
         if (participantDTO.name && participantDTO.email) {
             const newParticipantsId = getCreateParticipant(participantDTO).lastInsertRowid;
             console.info(`Teilnehmer ${participantDTO.name} mit ID ${newParticipantsId} erstellt`); // Log-Ausgabe der Erstellung
@@ -83,4 +86,6 @@ export const createParticipant = (req: express.Request, res: express.Response) =
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
+
+export default router;

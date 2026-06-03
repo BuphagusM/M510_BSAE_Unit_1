@@ -1,5 +1,5 @@
 // dashboards-controller.ts
-import express, { Request, Response } from 'express';
+import express, {Request, Response} from 'express';
 import {getAllCourses, getCourseCountByStatus} from '../services/course-service';
 import {getAllParticipants, getParticipantCountByStatus} from '../services/participant-service';
 import {DashboarDetailsInfo} from "../models/dashboar-details-info";
@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 // Dashboard-Handler
-router.get('/dashboard/details', (req: Request, res: Response) => {
+router.get('/details', (req: Request, res: Response) => {
     try {
         const dashboardDetailsInfo: DashboarDetailsInfo = {
             totalActiveCourses: getCourseCountByStatus('active'),

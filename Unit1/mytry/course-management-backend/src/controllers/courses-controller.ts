@@ -1,11 +1,13 @@
 // participants-controller.ts
-import express from 'express';
+import express, {Request, Response} from 'express';
 import {getCourseById, getcreateCourse, getRemoveCourseById, getUpdateCourseById} from '../services/course-service';
 import {getAllCoursesDto} from '../services/dto-service';
 import {CourseDTO} from "../models/course-dto";
 
+const router = express.Router();
+
 // Kurs-Handler
-export const getAllCoursesDTOHandler = (req: express.Request, res: express.Response) => {
+router.get('/', (req: Request, res: Response) => {
     try {
         const coursesDTO = getAllCoursesDto();
         console.info('Kursdaten abgerufen: ', coursesDTO); // Log-Ausgabe der Kursdaten
@@ -15,9 +17,9 @@ export const getAllCoursesDTOHandler = (req: express.Request, res: express.Respo
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-};
+});
 
-export const removeCourseById = (req: express.Request, res: express.Response) => {
+router.delete('/:courseId', (req: Request, res: Response) => {
     try {
         const courseId = req.params.courseId;
         const course = getCourseById(Number(courseId));
@@ -34,17 +36,17 @@ export const removeCourseById = (req: express.Request, res: express.Response) =>
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
 
-export const updateCourseById = (req: express.Request, res: express.Response) => {
+router.put('/:courseId', (req: Request, res: Response) => {
     try {
         const courseId = req.params.courseId;
-        const courseDto : CourseDTO = req.body;
+        const courseDto: CourseDTO = req.body;
         if (courseId === courseDto.id.toString()) {
             getUpdateCourseById(courseDto.id, courseDto);
             console.info(`Kurs mit ID ${courseId} aktualisiert`); // Log-Ausgabe der Aktualisierungsaktion
             return res.status(200).json({message: `Kurs mit ID ${courseId} aktualisiert`});
-        }else {
+        } else {
             const errMsg = `Kurs-ID im Pfad (${courseId}) stimmt nicht mit ID im Body (${courseDto.id}) überein`;
             console.warn(errMsg);
             return res.status(400).json({errMsg});
@@ -54,9 +56,9 @@ export const updateCourseById = (req: express.Request, res: express.Response) =>
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
 
-export const createCourse = (req: express.Request, res: express.Response) => {
+router.post('/create', (req: Request, res: Response) => {
     try {
         const courseDTO: CourseDTO = req.body;
         // Wenn der Body in eine CoursesEntetiy gemappt werden kann
@@ -74,4 +76,6 @@ export const createCourse = (req: express.Request, res: express.Response) => {
         console.error(error, errMsg);
         return res.status(500).json({errMsg});
     }
-}
+})
+
+export default router;

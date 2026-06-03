@@ -1,8 +1,8 @@
 // server.ts
 import express from 'express';
 import cors from 'cors';
-import * as coursesController from './controllers/courses-controller';
-import * as participantsController from './controllers/participants-controller';
+import coursesController from './controllers/courses-controller';
+import participantsController from './controllers/participants-controller';
 import dashboardController from './controllers/dashboards-controller';
 
 const app = express();
@@ -35,19 +35,13 @@ app.use(express.json());
  *  app.get(apiVersion + '/dashboard/details', apiKeyMiddleware, getDashboardDetailsInfo);
  */
 // ungeschützt da für UI ClientKey nicht geeignet ist:
-app.use(apiVersion, dashboardController);
+app.use(apiVersion + '/dashboard', dashboardController);
 
 // Kurs-Endpunkte
-app.get(apiVersion + '/courses', coursesController.getAllCoursesDTOHandler);
-app.delete(apiVersion + '/courses/:courseId', coursesController.removeCourseById)
-app.put(apiVersion + '/courses/:courseId', coursesController.updateCourseById)
-app.post(apiVersion + '/courses/create', coursesController.createCourse)
+app.use(apiVersion + '/courses', coursesController);
 
 // Teilnehmer-Endpunkte
-app.get(apiVersion + '/participants', participantsController.getAllParticipantsDTOHandler);
-app.delete(apiVersion + '/participants/:participantId', participantsController.removeParticipantById)
-app.put(apiVersion + '/participants/:participantId', participantsController.updateParticipantById)
-app.post(apiVersion + '/participants/create', participantsController.createParticipant)
+app.use(apiVersion + '/participants', participantsController);
 
 
 app.listen(PORT, () => {
