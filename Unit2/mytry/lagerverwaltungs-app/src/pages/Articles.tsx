@@ -97,7 +97,11 @@ function Articles(): React.ReactElement {
                             />
                         </Tooltip>
                         {filters.map((filter) => (
-                            <>
+                                // Fragment nötig: map() erlaubt nur 1 Root-Element,
+                                // aber wir rendern Typography + Select nebeneinander.
+                                // Kurzform <>...</> nicht möglich, da wir hier key benötigen.
+                                // Langform <React.Fragment key={...}> nötig wenn key benötigt wird.
+                            <React.Fragment key={filter.id}>
                                 <Typography variant="subtitle1">{filter.label}</Typography>
                                 <Select
                                     label={filter.label}
@@ -114,7 +118,7 @@ function Articles(): React.ReactElement {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                            </>
+                            </React.Fragment>
                         ))}
                         <Button variant="contained" color="primary"
                                 onClick={() => setFilterValues({category: '', status: '', location: '', search: ''})}
