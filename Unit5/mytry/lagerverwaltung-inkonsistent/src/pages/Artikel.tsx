@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { artikel as alleArtikel } from '../data/mockData';
 import { Artikel, ArtikelStatus } from '../types';
+import PrimaryButton from '../components/PrimaryButton';
+import StatusChip from '../components/StatusChip';
+import SecondaryButton from '../components/SecondaryButton';
 
 // -----------------------------------------------------------------------
 // Artikelseite – absichtlich andere Button- und Status-Chip-Stile als Dashboard
@@ -43,20 +46,9 @@ const ArtikelSeite: React.FC = () => {
         </div>
 
         {/* Primär-Button: grün, grösser, fett – absichtlich anders als blau auf Dashboard */}
-        <button
-          style={{
-            backgroundColor: '#2e7d32',
-            color: 'white',
-            padding: '10px 24px',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '15px',
-            fontWeight: 'bold',
-          }}
-        >
+        <PrimaryButton onClick={() => alert('Neuen Artikel erstellen')}>
           + Neuer Artikel
-        </button>
+        </PrimaryButton>
       </div>
 
       {/* Filter-Buttons: Pill-Form, wieder anderes Styling */}
@@ -139,39 +131,20 @@ const ArtikelSeite: React.FC = () => {
                 <td style={{ padding: '10px 14px', fontSize: '13px', color: '#555' }}>{a.lagerort}</td>
 
                 {/* Status-Chips: absichtlich eckige Badges (kein Radius) – anders als Dashboard-Pills */}
-                <td style={{ padding: '10px 14px' }}>
-                  <StatusBadge status={a.status} />
-                </td>
+                <StatusChip status={a.status} />
+
 
                 {/* Aktions-Buttons: kleine Outline-Buttons – wieder andere Variante */}
                 <td style={{ padding: '10px 14px' }}>
                   <div style={{ display: 'flex', gap: '6px' }}>
-                    <button
-                      style={{
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        backgroundColor: 'transparent',
-                        border: '1px solid #1976d2',
-                        color: '#1976d2',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
-                      }}
-                    >
+                    <PrimaryButton onClick={() => alert(`Artikel ${a.name} bearbeiten`)}>
                       Bearbeiten
-                    </button>
-                    <button
-                      style={{
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        backgroundColor: 'transparent',
-                        border: '1px solid #d32f2f',
-                        color: '#d32f2f',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
-                      }}
+                    </PrimaryButton>
+                    <SecondaryButton
+                      onClick={() => alert(`Artikel ${a.name} löschen`)}
                     >
                       Löschen
-                    </button>
+                    </SecondaryButton>
                   </div>
                 </td>
               </tr>
@@ -196,32 +169,5 @@ const ArtikelSeite: React.FC = () => {
     </div>
   );
 };
-
-// Hilfsfunktion: Status-Badge – eckig, flach, ohne Radius (absichtlich anders als Dashboard)
-function StatusBadge({ status }: { status: ArtikelStatus }) {
-  const config: Record<ArtikelStatus, { label: string; bg: string; color: string }> = {
-    aktiv: { label: 'Aktiv', bg: '#4caf50', color: 'white' },
-    kritisch: { label: 'Kritisch', bg: '#ff9800', color: 'white' },
-    'nicht-verfügbar': { label: 'Nicht verfügbar', bg: '#f44336', color: 'white' },
-    pausiert: { label: 'Pausiert', bg: '#9e9e9e', color: 'white' },
-  };
-  const c = config[status];
-  return (
-    <span
-      style={{
-        backgroundColor: c.bg,
-        color: c.color,
-        padding: '2px 8px',
-        fontSize: '11px',
-        borderRadius: '2px',
-        display: 'inline-block',
-        fontWeight: 600,
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {c.label}
-    </span>
-  );
-}
 
 export default ArtikelSeite;
