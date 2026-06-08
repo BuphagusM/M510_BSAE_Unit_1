@@ -49,6 +49,9 @@ const StatusChip: React.FC<StatusChipProps> = ({ status }) => {
                 display: "inline-block",
                 whiteSpace: "nowrap",
                 lineHeight: 1.6,
+                minWidth: "120px",
+                textAlign: "center",
+                marginTop: "12px",
             }}
         >
             {config.label}

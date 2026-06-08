@@ -4,6 +4,7 @@ import { Artikel, ArtikelStatus } from '../types';
 import PrimaryButton from '../components/PrimaryButton';
 import StatusChip from '../components/StatusChip';
 import SecondaryButton from '../components/SecondaryButton';
+import { Stack, Button, Box, Table, TableCell, Typography, Tab } from '@mui/material';
 
 // -----------------------------------------------------------------------
 // Artikelseite – absichtlich andere Button- und Status-Chip-Stile als Dashboard
@@ -28,30 +29,20 @@ const ArtikelSeite: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-
-      {/* Header mit Titel und Haupt-Button */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '24px',
-        }}
-      >
-        <div>
-          <h1 style={{ margin: 0, fontSize: '24px', color: '#222' }}>Artikel</h1>
-          <p style={{ margin: '4px 0 0 0', color: '#777', fontSize: '14px' }}>
+      <Box>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Artikel
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
             {artikelListe.length} Artikel im System
-          </p>
-        </div>
-
-        {/* Primär-Button: grün, grösser, fett – absichtlich anders als blau auf Dashboard */}
-        <PrimaryButton onClick={() => alert('Neuen Artikel erstellen')}>
+          </Typography>
+      </Box>
+      <Box display="flex" justifyContent="flex-end" marginBottom={2}>
+        <PrimaryButton onClick={() => alert('Neuen Artikel erstellen')} color='success'>
           + Neuer Artikel
         </PrimaryButton>
-      </div>
+      </Box>
 
-      {/* Filter-Buttons: Pill-Form, wieder anderes Styling */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         {filterOptionen.map((f) => (
           <button
@@ -72,7 +63,6 @@ const ArtikelSeite: React.FC = () => {
         ))}
       </div>
 
-      {/* Artikel-Tabelle */}
       <div style={{ overflowX: 'auto' }}>
         <table
           style={{
@@ -130,14 +120,11 @@ const ArtikelSeite: React.FC = () => {
                 </td>
                 <td style={{ padding: '10px 14px', fontSize: '13px', color: '#555' }}>{a.lagerort}</td>
 
-                {/* Status-Chips: absichtlich eckige Badges (kein Radius) – anders als Dashboard-Pills */}
                 <StatusChip status={a.status} />
 
-
-                {/* Aktions-Buttons: kleine Outline-Buttons – wieder andere Variante */}
                 <td style={{ padding: '10px 14px' }}>
                   <div style={{ display: 'flex', gap: '6px' }}>
-                    <PrimaryButton onClick={() => alert(`Artikel ${a.name} bearbeiten`)}>
+                    <PrimaryButton onClick={() => alert(`Artikel ${a.name} bearbeiten`)} color='primary'>
                       Bearbeiten
                     </PrimaryButton>
                     <SecondaryButton
@@ -171,3 +158,4 @@ const ArtikelSeite: React.FC = () => {
 };
 
 export default ArtikelSeite;
+

@@ -22,7 +22,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 }) => {
     return (
         <Button
-            color="secondary"
+            color="error"
             onClick={onClick}
             type={type}
             disabled={disabled}

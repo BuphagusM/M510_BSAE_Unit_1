@@ -13,6 +13,7 @@ interface PrimaryButtonProps {
     children: React.ReactNode;
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
+    color?: 'primary' |  'success';
 }
 
 // Hier definieren wir unseren PrimaryButton als funktionalen React-Komponenten.
@@ -24,11 +25,12 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     children,
     type = 'button',
     disabled = false,
+    color = 'primary',
 }) => {
     return (
         <Button
             variant="contained"
-            color="primary"
+            color={color}
             onClick={onClick}
             type={type}
             disabled={disabled}
