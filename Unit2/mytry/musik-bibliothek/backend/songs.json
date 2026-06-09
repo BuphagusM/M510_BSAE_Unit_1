@@ -1,5 +1,5 @@
 {
-  "nextId": 13,
+  "nextId": 16,
   "songs": [
     {
       "id": 1,
@@ -59,7 +59,7 @@
       "genre": "Soul",
       "year": 2010,
       "duration": "3:48",
-      "favorite": 0
+      "favorite": 1
     },
     {
       "id": 7,
@@ -102,7 +102,17 @@
       "favorite": 1
     },
     {
-      "id": 11,
+      "id": 12,
+      "title": "Mr. Brightside",
+      "artist": "The Killers",
+      "album": "Hot Fuss",
+      "genre": "Indie Rock",
+      "year": 2003,
+      "duration": "3:42",
+      "favorite": 1
+    },
+    {
+      "id": 13,
       "title": "One More Time",
       "artist": "Daft Punk",
       "album": "Discovery",
@@ -112,14 +122,24 @@
       "favorite": 0
     },
     {
-      "id": 12,
-      "title": "Mr. Brightside",
-      "artist": "The Killers",
-      "album": "Hot Fuss",
-      "genre": "Indie Rock",
-      "year": 2003,
-      "duration": "3:42",
-      "favorite": 1
+      "id": 14,
+      "title": "Rolling in the Deep",
+      "artist": "Adele",
+      "album": "42",
+      "genre": "Mumii",
+      "year": 2026,
+      "duration": "zulang",
+      "favorite": 0
+    },
+    {
+      "id": 15,
+      "title": "Roling in the Deep",
+      "artist": "Adele",
+      "album": "344",
+      "genre": "Mumii2",
+      "year": 1999,
+      "duration": "vielZulang' OR 1=1 --",
+      "favorite": 0
     }
   ]
 }

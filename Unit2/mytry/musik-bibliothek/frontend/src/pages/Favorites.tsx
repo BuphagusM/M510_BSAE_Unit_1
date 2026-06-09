@@ -7,12 +7,18 @@ function Favorites(): React.ReactElement {
   const [songs, setSongs]     = useState<Song[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
+  const [search, setSearch]   = useState('')
+
+
 
   // Nur Songs mit favorite === 1 anzeigen
   // TODO: Suche implementieren
   // Erweitere die Filterung so, dass auch nach Titel und Interpret gesucht werden kann.
   // Füge dazu einen search-State und ein Texteingabefeld in der filter-bar hinzu.
-  const favorites = songs.filter(s => s.favorite === 1)
+  const favorites = songs.filter(s => s.favorite === 1 && (
+    s.title.toLowerCase().includes(search.toLowerCase()) ||
+    s.artist.toLowerCase().includes(search.toLowerCase())
+  ))
 
   useEffect(() => {
     getSongs()
@@ -39,6 +45,8 @@ function Favorites(): React.ReactElement {
     }
   }
 
+
+
   return (
     <div>
       <h1 className="page-title">Favoriten</h1>
@@ -52,6 +60,15 @@ function Favorites(): React.ReactElement {
       )}
 
       {/* TODO: Suchfeld hier einfügen (className="search-input") */}
+      <div className="filter-bar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Suche nach Titel oder Interpret…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
 
       <p className="result-count">{favorites.length} Favoriten</p>
 

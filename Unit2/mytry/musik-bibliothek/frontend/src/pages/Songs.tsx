@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import type { Song, NewSong } from '../types/song.ts'
-import { getSongs, createSong, deleteSong, toggleFavorite } from '../services/api.ts'
+import { getSongs, createSong, deleteSong, toggleFavorite, searchSongs } from '../services/api.ts'
 
 // Songs-Seite – Übersicht aller Songs mit Filter, Hinzufügen und Löschen
 function Songs(): React.ReactElement {
@@ -66,6 +66,15 @@ function Songs(): React.ReactElement {
       setError('Song konnte nicht gespeichert werden.')
     }
   }
+// Songs suchen – ersetzt die lokale Liste durch die Suchergebnisse
+  async function setSearch(value: string) {
+    try {
+      const data = await searchSongs(value)
+      setSongs(data)
+    } catch {
+      setError('Backend nicht erreichbar. Bitte starte den Server.')
+    }
+  }
 
   return (
     <div>
@@ -94,8 +103,28 @@ function Songs(): React.ReactElement {
         </div>
       )}
 
+
+
       {/* Genre-Filter */}
       {/* TODO: Suchfeld hier einfügen (className="search-input") */}
+      <div className="filter-bar">
+        <input
+          type="text"
+          placeholder="Suche nach Titel oder Interpret…"
+          className="search-input"
+          // sucht erst nach 3 Zeichen, um zu viele Anfragen zu vermeiden
+          onChange={e => {
+            const value = e.target.value
+            if (value.length > 3) {
+              setSearch(value)
+            }else {
+              setSearch('') // Bei weniger als 3 Zeichen wieder alle Songs anzeigen
+            }
+          }}
+        />
+      </div>
+
+
       <div className="filter-bar">
         <select
           value={filterGenre}

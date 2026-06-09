@@ -1,0 +1,30 @@
+info:
+  name: update song
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: http://localhost:4000/api/songs/13/favorite
+  body:
+    type: json
+    data: |-
+      // favoriten von 0 zu 1
+
+      {
+        "id": 13,
+        "title": "One More Time",
+        "artist": "Daft Punk",
+        "album": "Discovery",
+        "genre": "Electronic",
+        "year": 2000,
+        "duration": "5:20",
+        "favorite": 1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
